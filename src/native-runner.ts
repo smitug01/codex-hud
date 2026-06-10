@@ -99,7 +99,7 @@ export function resolveNativeCodexPath(
     "openai-codex",
     "codex-rs",
     "target",
-    "debug",
+    "release",
     codexBinary,
   );
 }

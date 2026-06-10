@@ -41,10 +41,10 @@ test("createDoctorReport reports native bundle readiness", async () => {
     readTextFile: async () => [
       "#!/bin/sh",
       "# codex-hud shim",
-      "exec codex-hud native --codex /tmp/openai-codex/codex-rs/target/debug/codex -- \"$@\"",
+      "exec codex-hud native --codex /tmp/openai-codex/codex-rs/target/release/codex -- \"$@\"",
       "",
     ].join("\n"),
-    pathExists: async (target) => target === "/tmp/openai-codex/codex-rs/target/debug/codex",
+    pathExists: async (target) => target === "/tmp/openai-codex/codex-rs/target/release/codex",
   });
 
   assert.equal(report.codexHud.found, true);
@@ -116,5 +116,5 @@ test("createDoctorReport uses Windows defaults for shim and patched Codex paths"
   });
 
   assert.equal(report.codexShim.path, "C:\\Users\\me\\AppData\\Roaming/npm/codex.cmd");
-  assert.equal(report.patchedCodex.path, "C:\\Users\\me/Desktop/Github_repos/openai-codex/codex-rs/target/debug/codex.exe");
+  assert.equal(report.patchedCodex.path, "C:\\Users\\me/Desktop/Github_repos/openai-codex/codex-rs/target/release/codex.exe");
 });

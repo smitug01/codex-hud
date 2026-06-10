@@ -20,13 +20,13 @@ Todos 0/4 │ Stdin x5, Exec active
 
 ```sh
 cd /Users/liuyue/Desktop/Github_repos/openai-codex/codex-rs
-cargo build -p codex-cli
+cargo build --release -p codex-cli
 ```
 
 The patched binary is:
 
 ```sh
-/Users/liuyue/Desktop/Github_repos/openai-codex/codex-rs/target/debug/codex
+/Users/liuyue/Desktop/Github_repos/openai-codex/codex-rs/target/release/codex
 ```
 
 On native Windows, the patched binary is:
@@ -40,7 +40,7 @@ C:\Users\<you>\Desktop\Github_repos\openai-codex\codex-rs\target\debug\codex.exe
 Use a command-backed status line override when launching the patched binary:
 
 ```sh
-/Users/liuyue/Desktop/Github_repos/openai-codex/codex-rs/target/debug/codex \
+/Users/liuyue/Desktop/Github_repos/openai-codex/codex-rs/target/release/codex \
   -c 'tui.status_line=["command: codex-hud status"]'
 ```
 
@@ -62,6 +62,6 @@ status_line = ["command: codex-hud status"]
 - Implemented: command-backed native status line.
 - Implemented: multi-line command stdout in the native bottom footer.
 - Verified: `cargo test -p codex-tui status_line --lib`.
-- Verified: `cargo build -p codex-cli`.
+- Verified: `cargo build --release -p codex-cli`.
 
 This is still a local fork patch, not an upstream Codex CLI feature. The next step is to turn the patch into a clean upstream PR proposal and keep `codex-hud run` as the fallback for users on stock Codex CLI.

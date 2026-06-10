@@ -64,6 +64,39 @@ test("renderHud renders expanded snapshot across multiple lines", () => {
   );
 });
 
+test("renderHud default expanded output matches the README sample style", () => {
+  const output = renderHud({
+    config: DEFAULT_CONFIG,
+    options: { now: 0 },
+    snapshot: {
+      model: "gpt-5.5",
+      reasoningEffort: "medium",
+      cwd: "/tmp/codex-hud",
+      projectName: "codex-hud",
+      git: {
+        branch: "main",
+        isDirty: true,
+        ahead: 0,
+        behind: 0,
+      },
+      context: { label: "Context", percent: 42 },
+      usage: { label: "5h", percent: 68, windowMinutes: 300, resetsAt: 11820 },
+      weekly: { label: "Weekly", percent: 86, windowMinutes: 10080, resetsAt: 554400 },
+      tools: [
+        { name: "Exec", status: "active" },
+        { name: "Plan", status: "completed", count: 2 },
+      ],
+      todos: { completed: 2, total: 5, current: "Build CLI scaffold" },
+      warnings: [],
+    },
+  });
+
+  assert.equal(
+    output,
+    "[gpt-5.5 medium] │ codex-hud git:(main*)\nContext ████░░░░░░ 42% │ Usage ███████░░░ 68% (resets in 3h 17m) │ Weekly █████████░ 86% (resets in 6d 10h)\nTodos 2/5 │ Exec active, Plan x2",
+  );
+});
+
 test("renderHud respects element order and visibility config", () => {
   const output = renderHud({
     config: {

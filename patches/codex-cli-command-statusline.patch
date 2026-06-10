@@ -371,7 +371,7 @@ index e34fe46..a369367 100644
      }
  
      pub(super) fn configured_status_line_items(&self) -> Vec<String> {
-@@ -952,3 +970,85 @@ where
+@@ -952,3 +970,89 @@ where
      }
      (items, invalid)
  }

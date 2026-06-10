@@ -24,7 +24,7 @@ Usage:
   codex-hud native    Run patched Codex with codex-hud in the native footer
   codex-hud install-shim [--bin-dir <dir>] [--codex <path>]
   codex-hud uninstall-shim [--bin-dir <dir>]
-  codex-hud setup     Configure Codex CLI's native in-window status line
+  codex-hud setup     Fallback: configure Codex CLI's built-in status line
   codex-hud doctor    Check Codex HUD runtime readiness
   codex-hud config    Print effective configuration
   codex-hud config init [--path <file>]

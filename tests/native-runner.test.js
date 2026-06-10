@@ -77,7 +77,7 @@ test("resolveNativeCodexPath uses codex.exe on Windows by default", () => {
       homeDir: "C:\\Users\\me",
       platform: "win32",
     }),
-    "C:\\Users\\me/Desktop/Github_repos/openai-codex/codex-rs/target/debug/codex.exe",
+    "C:\\Users\\me/Desktop/Github_repos/openai-codex/codex-rs/target/release/codex.exe",
   );
 });
 

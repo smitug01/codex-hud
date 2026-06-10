@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
@@ -56,7 +57,7 @@ export function buildInstallPlan(options: ProductInstallOptions): ProductInstall
   const platform = options.platform ?? process.platform;
   const codexSource = options.codexSource ?? defaultCodexSource();
   const codexBinaryName = platform === "win32" ? "codex.exe" : "codex";
-  const codexBinary = path.join(codexSource, "codex-rs", "target", "debug", codexBinaryName);
+  const codexBinary = path.join(codexSource, "codex-rs", "target", "release", codexBinaryName);
   const binDir = options.binDir ?? defaultShimBinDir({ env: options.env, platform });
   const shimName = platform === "win32" ? "codex.cmd" : "codex";
 
@@ -67,7 +68,7 @@ export function buildInstallPlan(options: ProductInstallOptions): ProductInstall
     commands: [
       ["git", "clone", "--depth", "1", "--branch", "rust-v0.131.0", "https://github.com/openai/codex.git", codexSource],
       ["git", "apply", "patches/codex-cli-command-statusline.patch"],
-      ["cargo", "build", "-p", "codex-cli"],
+      ["cargo", "build", "--release", "-p", "codex-cli"],
     ],
   };
 }
@@ -97,7 +98,11 @@ export async function installProduct(options: ProductInstallOptions): Promise<nu
   const patchCode = await applyBundledPatch(plan.codexSource);
   if (patchCode !== 0) return patchCode;
 
-  const buildCode = await spawnInherited("cargo", ["build", "-p", "codex-cli"], path.join(plan.codexSource, "codex-rs"));
+  const buildCode = await spawnInherited(
+    "cargo",
+    ["build", "--release", "-p", "codex-cli"],
+    path.join(plan.codexSource, "codex-rs"),
+  );
   if (buildCode !== 0) return buildCode;
 
   const shim = await installCodexShim({
@@ -124,8 +129,7 @@ async function applyBundledPatch(codexSource: string): Promise<number> {
   const action = patchActionFromChecks(canApply, canReverseApply);
 
   if (action === "already-applied") {
-    process.stdout.write("codex-hud: native Codex patch already applied\n");
-    return 0;
+    return await finishPatchStep(codexSource, "codex-hud: native Codex patch already applied\n");
   }
   if (action === "conflict") {
     process.stderr.write(`codex-hud: cannot apply native Codex patch in ${codexSource}\n`);
@@ -133,7 +137,45 @@ async function applyBundledPatch(codexSource: string): Promise<number> {
     return 1;
   }
 
-  return await spawnInherited("git", ["apply", patchPath], codexSource);
+  const code = await spawnInherited("git", ["apply", patchPath], codexSource);
+  if (code !== 0) return code;
+  return await finishPatchStep(codexSource);
+}
+
+async function finishPatchStep(codexSource: string, okMessage?: string): Promise<number> {
+  const errors = await validateNativePatchIntegrity(codexSource);
+  if (errors.length > 0) {
+    process.stderr.write(`codex-hud: native Codex patch is incomplete in ${codexSource}\n`);
+    for (const error of errors) {
+      process.stderr.write(`codex-hud: ${error}\n`);
+    }
+    process.stderr.write("codex-hud: remove that managed checkout and rerun install, or pass --codex-source to a clean checkout.\n");
+    return 1;
+  }
+  if (okMessage) process.stdout.write(okMessage);
+  return 0;
+}
+
+export async function validateNativePatchIntegrity(codexSource: string): Promise<string[]> {
+  const statusSurfacesPath = path.join(codexSource, "codex-rs", "tui", "src", "chatwidget", "status_surfaces.rs");
+  let statusSurfaces: string;
+  try {
+    statusSurfaces = await readFile(statusSurfacesPath, "utf8");
+  } catch {
+    return ["codex-rs/tui/src/chatwidget/status_surfaces.rs is missing"];
+  }
+
+  const errors: string[] = [];
+  if (!statusSurfaces.includes('const STATUS_LINE_COMMAND_PREFIX: &str = "command:";')) {
+    errors.push("codex-rs/tui/src/chatwidget/status_surfaces.rs is missing command status-line support");
+  }
+  if (!statusSurfaces.includes("fn status_line_command_output(command: &str, cwd: &Path)")) {
+    errors.push("codex-rs/tui/src/chatwidget/status_surfaces.rs is missing command output rendering");
+  }
+  if (!statusSurfaces.includes("assert_eq!(output[0].spans[0].style.fg, Some(Color::Magenta));")) {
+    errors.push("codex-rs/tui/src/chatwidget/status_surfaces.rs is missing the completed ANSI style assertion");
+  }
+  return errors;
 }
 
 function installPlanText(plan: ProductInstallPlan): string {

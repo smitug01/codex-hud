@@ -57,6 +57,7 @@ Codex HUD is designed to provide the same native footer workflow on macOS, Linux
 macOS/Linux:
 
 ```bash
+npm install -g @jiawang1209/codex-hud
 codex-hud install
 codex-hud doctor
 codex
@@ -69,6 +70,7 @@ If a terminal font renders block progress bars poorly, set `CODEX_HUD_ASCII=1` b
 Windows PowerShell/CMD:
 
 ```powershell
+npm install -g @jiawang1209/codex-hud
 codex-hud.cmd install
 codex-hud.cmd doctor
 where.exe codex

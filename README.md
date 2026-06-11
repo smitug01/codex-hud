@@ -131,6 +131,7 @@ winget install Git.Git Rustlang.Rustup
 Install the native adapter and launch Codex:
 
 ```powershell
+npm install -g @jiawang1209/codex-hud
 codex-hud.cmd install
 codex-hud.cmd doctor
 where.exe codex
@@ -157,6 +158,7 @@ sudo apt install -y git cargo tmux
 Install the native adapter and launch Codex:
 
 ```bash
+npm install -g @jiawang1209/codex-hud
 codex-hud install
 which codex
 codex-hud doctor

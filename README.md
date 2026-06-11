@@ -79,12 +79,16 @@ npm install -g @jiawang1209/codex-hud
 
 Then install the native HUD adapter. This is the important step that makes the normal `codex` command use the full Codex HUD footer. `codex-hud setup` is only a fallback and does not install this adapter.
 
-| Environment | Shim | Footer command |
-| --- | --- | --- |
-| macOS/Linux/WSL | `codex` | `codex-hud status` |
-| Windows PowerShell/CMD | `codex.cmd` | `codex-hud.cmd status` |
+Codex HUD is designed to provide the same native footer workflow on macOS, Linux, WSL, and Windows PowerShell/CMD without Docker. Each environment gets its own local install, shim, patched Codex binary, and `doctor` check. Keep WSL and native Windows installs separate; do not share `codex`, `codex-hud`, or npm paths across that boundary.
 
-After `codex-hud install`, the bottom footer uses the same renderer as `codex-hud status`, so the style and rate-limit data match across macOS, Linux, WSL, and native Windows.
+| Environment | Support level | Shim | Footer command |
+| --- | --- | --- | --- |
+| macOS Terminal/iTerm2 | Reference native CLI path | `codex` | `codex-hud status` |
+| Linux | Native Unix CLI path | `codex` | `codex-hud status` |
+| WSL | Native Linux-style path inside WSL | `codex` | `codex-hud status` |
+| Windows PowerShell/CMD | Native Windows path using npm `.cmd` shims | `codex.cmd` | `codex-hud.cmd status` |
+
+After `codex-hud install`, the bottom footer uses the same renderer as `codex-hud status`. `codex-hud doctor` verifies the whole native footer chain: Codex CLI, Codex HUD, shim, patched Codex binary, and the platform-correct footer command.
 
 ### macOS or Linux
 
@@ -116,6 +120,8 @@ If `codex` still resolves to the official binary after install, put `~/.local/bi
 
 Use this path when your prompt shows Windows paths such as `C:\Users\<you>\...`.
 
+This path is native Windows, not WSL. It uses npm `.cmd` shims so PowerShell execution policy does not block the footer command.
+
 Install prerequisites:
 
 ```powershell
@@ -138,6 +144,8 @@ Do not use `codex-hud setup` for this goal. `setup` only configures Codex CLI's 
 ### WSL
 
 Use this path when you are inside WSL Ubuntu/Debian and paths look like `/home/<you>/...`. Treat WSL as Linux, not as native Windows.
+
+WSL uses the Linux-style path from inside WSL. Keep the WSL Codex install, WSL npm install, and WSL shim separate from any native Windows Codex or npm install.
 
 Install prerequisites:
 
@@ -167,6 +175,19 @@ codex
 ```
 
 This fallback configures Codex CLI's supported native status-line items. It is useful, but the style and rate-limit percentages can differ from `codex-hud status`.
+
+If your terminal font cannot render block progress bars cleanly, use ASCII bars:
+
+```bash
+CODEX_HUD_ASCII=1 codex-hud status
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:CODEX_HUD_ASCII = "1"
+codex-hud.cmd status
+```
 
 ## HUD Pane Mode
 

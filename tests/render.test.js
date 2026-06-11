@@ -154,6 +154,26 @@ test("renderHud can color progress bars", () => {
   assert.match(output, /Context/);
 });
 
+test("renderHud can render ASCII progress bars for weaker terminals", () => {
+  const output = renderHud({
+    config: DEFAULT_CONFIG,
+    options: { ascii: true },
+    snapshot: {
+      cwd: "/tmp/codex-hud",
+      projectName: "codex-hud",
+      context: { label: "Context", percent: 42 },
+      usage: { label: "5h", percent: 68 },
+      weekly: { label: "Weekly", percent: 86 },
+      tools: [],
+      todos: { completed: 0, total: 0 },
+      warnings: [],
+    },
+  });
+
+  assert.match(output, /Context ####------ 42%/);
+  assert.doesNotMatch(output, /█|░/);
+});
+
 test("renderHud truncates compact output to terminal width", () => {
   const output = renderHud({
     config: { ...DEFAULT_CONFIG, layout: "compact" },

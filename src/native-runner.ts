@@ -9,6 +9,7 @@ export interface NativeOptions {
   codexArgs: string[];
   codexPath?: string;
   dryRun: boolean;
+  platform?: NodeJS.Platform;
 }
 
 export interface ShimOptions {
@@ -105,8 +106,9 @@ export function resolveNativeCodexPath(
 }
 
 export async function runNativeCodex(options: NativeOptions): Promise<number> {
-  const codexPath = resolveNativeCodexPath(options.codexPath);
-  const args = buildNativeCodexArgs(options.codexArgs);
+  const platform = options.platform ?? process.platform;
+  const codexPath = resolveNativeCodexPath(options.codexPath, { platform });
+  const args = buildNativeCodexArgs(options.codexArgs, { platform });
 
   if (options.dryRun) {
     process.stdout.write(`${[codexPath, ...args].map(shellQuote).join(" ")}\n`);

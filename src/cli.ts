@@ -223,8 +223,9 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function terminalRenderOptions(): { color: boolean; terminalWidth?: number } {
+function terminalRenderOptions(): { ascii: boolean; color: boolean; terminalWidth?: number } {
   return {
+    ascii: process.env.CODEX_HUD_ASCII === "1",
     color: process.env.CODEX_HUD_FORCE_COLOR === "1" || (process.stdout.isTTY && !process.env.NO_COLOR),
     terminalWidth: process.stdout.columns,
   };

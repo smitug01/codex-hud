@@ -2,6 +2,7 @@ import type { HudColor, HudConfig, HudElement } from "./config.js";
 import type { HudSnapshot, ProgressSnapshot, ToolActivity } from "./types.js";
 
 export interface RenderOptions {
+  ascii?: boolean;
   color?: boolean;
   now?: number;
   terminalWidth?: number;
@@ -114,7 +115,9 @@ function formatProgress(
   const width = 10;
   const filled = Math.round((percent / 100) * width);
   const empty = width - filled;
-  const bar = `${config.colors.barFilled.repeat(filled)}${config.colors.barEmpty.repeat(empty)}`;
+  const filledChar = options.ascii ? "#" : config.colors.barFilled;
+  const emptyChar = options.ascii ? "-" : config.colors.barEmpty;
+  const bar = `${filledChar.repeat(filled)}${emptyChar.repeat(empty)}`;
   const label = kind === "usage" && progress.windowMinutes ? "Usage" : progress.label;
   const limitText = kind === "usage" ? progress.label : formatDurationMinutes(progress.windowMinutes ?? 0);
   const windowText = kind === "usage" || kind === "weekly"

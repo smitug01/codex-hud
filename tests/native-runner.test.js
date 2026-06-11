@@ -11,6 +11,7 @@ import {
   parseNativeArgs,
   removeCodexShim,
   resolveNativeCodexPath,
+  runNativeCodex,
 } from "../dist/native-runner.js";
 
 test("parseNativeArgs forwards Codex args after --", () => {
@@ -44,6 +45,31 @@ test("buildNativeCodexArgs uses the cmd shim for command-backed HUD on Windows",
     "--model",
     "gpt-5.5",
   ]);
+});
+
+test("runNativeCodex dry-run uses the Windows footer command on Windows", async () => {
+  let output = "";
+  const originalWrite = process.stdout.write;
+  process.stdout.write = (chunk, ...args) => {
+    output += String(chunk);
+    return true;
+  };
+
+  try {
+    const code = await runNativeCodex({
+      codexArgs: ["--model", "gpt-5.5"],
+      codexPath: "C:\\Users\\me\\codex.exe",
+      dryRun: true,
+      platform: "win32",
+    });
+
+    assert.equal(code, 0);
+  } finally {
+    process.stdout.write = originalWrite;
+  }
+
+  assert.match(output, /codex-hud\.cmd status/);
+  assert.doesNotMatch(output, /command: codex-hud status/);
 });
 
 test("buildShimScript delegates codex to codex-hud native", () => {

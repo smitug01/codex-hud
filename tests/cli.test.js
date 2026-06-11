@@ -125,6 +125,20 @@ test("codex-hud status honors CODEX_HUD_FORCE_COLOR", () => {
   assert.match(result.stdout, /\x1b\[/);
 });
 
+test("codex-hud status honors CODEX_HUD_ASCII", () => {
+  const result = spawnSync(process.execPath, ["dist/index.js", "status"], {
+    encoding: "utf8",
+    env: {
+      ...process.env,
+      CODEX_HUD_ASCII: "1",
+    },
+  });
+
+  assert.equal(result.status, 0);
+  assert.match(result.stdout, /[#-]{10}/);
+  assert.doesNotMatch(result.stdout, /█|░/);
+});
+
 test("codex-hud install-shim installs codex wrapper into explicit bin dir", async () => {
   const dir = await mkdtemp(path.join(tmpdir(), "codex-hud-cli-"));
 

@@ -45,18 +45,26 @@ npm install -g @jiawang1209/codex-hud
 
 Then install the native HUD adapter. This is the step that makes the normal `codex` command use the full Codex HUD footer. `codex-hud setup` is only a fallback and does not install this adapter.
 
-| Environment | Shim | Footer command |
-| --- | --- | --- |
-| macOS/Linux/WSL | `codex` | `codex-hud status` |
-| Windows PowerShell/CMD | `codex.cmd` | `codex-hud.cmd status` |
+Codex HUD is designed to provide the same native footer workflow on macOS, Linux, WSL, and Windows PowerShell/CMD without Docker. Each environment gets its own local install, shim, patched Codex binary, and `doctor` check. Keep WSL and native Windows installs separate.
 
-macOS/Linux/WSL:
+| Environment | Support level | Shim | Footer command |
+| --- | --- | --- | --- |
+| macOS Terminal/iTerm2 | Reference native CLI path | `codex` | `codex-hud status` |
+| Linux | Native Unix CLI path | `codex` | `codex-hud status` |
+| WSL | Native Linux-style path inside WSL | `codex` | `codex-hud status` |
+| Windows PowerShell/CMD | Native Windows path using npm `.cmd` shims | `codex.cmd` | `codex-hud.cmd status` |
+
+macOS/Linux:
 
 ```bash
 codex-hud install
 codex-hud doctor
 codex
 ```
+
+WSL should use the same commands, but keep the WSL Codex install, WSL npm install, and WSL shim separate from native Windows installs.
+
+If a terminal font renders block progress bars poorly, set `CODEX_HUD_ASCII=1` before running `codex-hud status`.
 
 Windows PowerShell/CMD:
 

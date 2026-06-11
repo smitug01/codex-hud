@@ -10,6 +10,8 @@ npm install -g @jiawang1209/codex-hud
 
 Then run `codex-hud install`. This is the step that makes the normal `codex` command use the full Codex HUD footer. `codex-hud setup` is only a fallback and does not install the native adapter.
 
+Codex HUD is designed to provide the same native footer workflow on macOS, Linux, WSL, and Windows PowerShell/CMD without Docker. Each environment gets its own local install, shim, patched Codex binary, and `doctor` check. Keep WSL and native Windows installs separate; do not share npm or Codex paths across that boundary.
+
 `codex-hud install` prepares the native bundle:
 
 - downloads a clean Codex CLI source checkout under `~/.codex-hud/native/openai-codex`
@@ -45,6 +47,8 @@ The shim is usually installed at `~/.local/bin/codex`. If `which codex` still po
 
 Use this path when your prompt shows Windows paths such as `C:\Users\<you>\...`.
 
+This is the native Windows path. It uses npm `.cmd` shims so PowerShell execution policy does not block the footer command.
+
 Install prerequisites:
 
 ```powershell
@@ -79,6 +83,8 @@ Do not use `codex-hud setup` when your goal is to make `codex.cmd` show the full
 ## WSL
 
 Use this path when you are inside WSL Ubuntu/Debian and paths look like `/home/<you>/...`. Treat WSL as Linux, not native Windows.
+
+WSL uses the Linux-style path from inside WSL. Keep the WSL Codex install, WSL npm install, and WSL shim separate from native Windows installs.
 
 Install prerequisites:
 
@@ -128,3 +134,18 @@ codex
 ```
 
 This fallback does not use the full Codex HUD renderer, so the style and rate-limit percentages can differ from `codex-hud status`.
+
+## ASCII Progress Bars
+
+If your terminal font cannot render block progress bars cleanly, use ASCII bars:
+
+```bash
+CODEX_HUD_ASCII=1 codex-hud status
+```
+
+On Windows PowerShell:
+
+```powershell
+$env:CODEX_HUD_ASCII = "1"
+codex-hud.cmd status
+```

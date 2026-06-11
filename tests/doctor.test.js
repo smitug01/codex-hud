@@ -57,8 +57,65 @@ test("createDoctorReport reports native bundle readiness", async () => {
   assert.match(report.lines.join("\n"), /native status command configured/);
 });
 
+test("createDoctorReport is not ready when the codex-hud shim is missing", async () => {
+  const report = await createDoctorReport({
+    resolveCodexPath: async () => "/usr/local/bin/codex",
+    readCodexVersion: async () => "0.131.0",
+    resolveCodexHudPath: async () => "/usr/local/bin/codex-hud",
+    codexHome: "/tmp/codex-home",
+    shimPath: "/tmp/bin/codex",
+    readTextFile: async () => undefined,
+    pathExists: async (target) => target === "/tmp/codex-home",
+  });
+
+  assert.equal(report.ok, false);
+  assert.match(report.lines.join("\n"), /codex shim: not installed/);
+});
+
+test("createDoctorReport is not ready when the patched Codex binary is missing", async () => {
+  const report = await createDoctorReport({
+    resolveCodexPath: async () => "/tmp/bin/codex",
+    readCodexVersion: async () => "0.131.0",
+    resolveCodexHudPath: async () => "/tmp/bin/codex-hud",
+    codexHome: "/tmp/codex-home",
+    shimPath: "/tmp/bin/codex",
+    readTextFile: async () => [
+      "#!/bin/sh",
+      "# codex-hud shim",
+      "exec codex-hud native --codex /tmp/openai-codex/codex-rs/target/release/codex -- \"$@\"",
+      "",
+    ].join("\n"),
+    pathExists: async () => false,
+  });
+
+  assert.equal(report.ok, false);
+  assert.match(report.lines.join("\n"), /patched Codex: not found/);
+});
+
+test("createDoctorReport is not ready when native status command is not configured", async () => {
+  const report = await createDoctorReport({
+    resolveCodexPath: async () => "/tmp/bin/codex",
+    readCodexVersion: async () => "0.131.0",
+    resolveCodexHudPath: async () => "/tmp/bin/codex-hud",
+    codexHome: "/tmp/codex-home",
+    shimPath: "/tmp/bin/codex",
+    readTextFile: async () => [
+      "#!/bin/sh",
+      "# codex-hud shim",
+      "exec /tmp/openai-codex/codex-rs/target/release/codex \"$@\"",
+      "",
+    ].join("\n"),
+    pathExists: async (target) => target === "/tmp/openai-codex/codex-rs/target/release/codex",
+  });
+
+  assert.equal(report.ok, false);
+  assert.match(report.lines.join("\n"), /native status command: not configured/);
+});
+
 test("createDoctorReport detects a Windows cmd shim", async () => {
   const report = await createDoctorReport({
+    platform: "win32",
+    env: { APPDATA: "C:\\Users\\me\\AppData\\Roaming", USERPROFILE: "C:\\Users\\me" },
     resolveCodexPath: async () => "C:\\Users\\me\\bin\\codex.cmd",
     resolveCodexHudPath: async () => "C:\\Users\\me\\bin\\codex-hud.cmd",
     readCodexVersion: async () => "0.131.0",
@@ -76,6 +133,52 @@ test("createDoctorReport detects a Windows cmd shim", async () => {
   assert.equal(report.codexShim.installed, true);
   assert.equal(report.patchedCodex.path, "C:\\Users\\me\\codex.exe");
   assert.equal(report.nativeStatusCommand.configured, true);
+});
+
+test("createDoctorReport rejects a Windows shim that skips the cmd npm shim", async () => {
+  const report = await createDoctorReport({
+    platform: "win32",
+    env: { APPDATA: "C:\\Users\\me\\AppData\\Roaming", USERPROFILE: "C:\\Users\\me" },
+    resolveCodexPath: async () => "C:\\Users\\me\\AppData\\Roaming\\npm\\codex.cmd",
+    resolveCodexHudPath: async () => "C:\\Users\\me\\AppData\\Roaming\\npm\\codex-hud.cmd",
+    readCodexVersion: async () => "0.131.0",
+    codexHome: "C:\\Users\\me\\.codex",
+    shimPath: "C:\\Users\\me\\AppData\\Roaming\\npm\\codex.cmd",
+    readTextFile: async () => [
+      "@echo off",
+      "REM codex-hud shim",
+      "codex-hud native --codex \"C:\\Users\\me\\codex.exe\" -- %*",
+      "",
+    ].join("\n"),
+    pathExists: async () => true,
+  });
+
+  assert.equal(report.ok, false);
+  assert.equal(report.nativeStatusCommand.configured, false);
+  assert.match(report.lines.join("\n"), /native status command: not configured/);
+});
+
+test("createDoctorReport rejects WSL installs that point at native Windows paths", async () => {
+  const report = await createDoctorReport({
+    platform: "linux",
+    env: { WSL_DISTRO_NAME: "Ubuntu" },
+    resolveCodexPath: async () => "/mnt/c/Users/me/AppData/Roaming/npm/codex.cmd",
+    resolveCodexHudPath: async () => "/usr/local/bin/codex-hud",
+    readCodexVersion: async () => "0.131.0",
+    codexHome: "/home/me/.codex",
+    shimPath: "/home/me/.local/bin/codex",
+    readTextFile: async () => [
+      "#!/bin/sh",
+      "# codex-hud shim",
+      "exec codex-hud native --codex /home/me/.codex-hud/native/openai-codex/codex-rs/target/release/codex -- \"$@\"",
+      "",
+    ].join("\n"),
+    pathExists: async () => true,
+  });
+
+  assert.equal(report.platform, "wsl");
+  assert.equal(report.ok, false);
+  assert.match(report.lines.join("\n"), /WSL Codex path points at a Windows install/);
 });
 
 test("resolveCommandArgs uses where.exe on Windows", () => {

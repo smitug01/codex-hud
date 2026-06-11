@@ -21,7 +21,7 @@
   "interface": {
     "displayName": "Codex HUD",
     "shortDescription": "Terminal HUD for Codex CLI sessions",
-    "longDescription": "Codex HUD provides a Codex CLI-first terminal telemetry layer for model, reasoning effort, project, git, context, usage, tools, todos, and session signals. The first version ships as a standalone CLI with a Codex plugin wrapper for setup and future native statusline integration.",
+    "longDescription": "Codex HUD provides a Codex CLI-first terminal telemetry layer for model, reasoning effort, project, git, context, usage, tools, todos, and session signals. The product ships as an npm CLI with a native Codex adapter for macOS, Linux, WSL, and Windows PowerShell/CMD, plus a Codex plugin wrapper for guidance.",
     "developerName": "Codex HUD contributors",
     "category": "Engineering",
     "capabilities": [

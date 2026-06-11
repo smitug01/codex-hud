@@ -18,6 +18,7 @@ export interface CodexInfo {
 
 export interface DoctorReport {
   ok: boolean;
+  platform: string;
   codexCli: {
     found: boolean;
     path?: string;
@@ -167,9 +168,20 @@ export async function createDoctorReport(deps: DoctorDeps = {}): Promise<DoctorR
   const patchedCodexPath = parseShimCodexPath(shimText)
     ?? resolveNativeCodexPath(undefined, { env, homeDir: nativeHomeDir(env, platform), platform });
   const patchedCodexFound = await exists(patchedCodexPath);
-  const nativeStatusCommandConfigured = Boolean(shimText && /codex-hud(?:\.cmd)?\s+native/.test(shimText));
+  const platformName = doctorPlatformName(platform, env);
+  const nativeStatusCommandConfigured = Boolean(shimText && expectedNativeCommandRegex(platformName).test(shimText));
+  const pathIssues = doctorPathIssues({ codexPath, codexHudPath, patchedCodexPath, platformName });
+  const ok = Boolean(
+    codexPath
+      && codexHudPath
+      && shimInstalled
+      && patchedCodexFound
+      && nativeStatusCommandConfigured
+      && pathIssues.length === 0,
+  );
   const lines: string[] = [];
 
+  lines.push(`Platform: ${platformName}`);
   if (codexPath) {
     lines.push(`Codex CLI: ${version ?? "found"} (${codexPath})`);
   } else {
@@ -195,11 +207,20 @@ export async function createDoctorReport(deps: DoctorDeps = {}): Promise<DoctorR
   } else {
     lines.push("native status command: not configured");
   }
+  for (const issue of pathIssues) {
+    lines.push(issue);
+  }
   lines.push(`Codex home: ${homeExists ? codexHome : `${codexHome} (missing)`}`);
   lines.push(`Node.js: ${process.version}`);
+  if (!ok) {
+    lines.push("Codex HUD native footer: not ready");
+  } else {
+    lines.push("Codex HUD native footer: ready");
+  }
 
   return {
-    ok: Boolean(codexPath),
+    ok,
+    platform: platformName,
     codexCli: {
       found: Boolean(codexPath),
       path: codexPath,
@@ -223,6 +244,46 @@ export async function createDoctorReport(deps: DoctorDeps = {}): Promise<DoctorR
     codexHome,
     lines,
   };
+}
+
+function doctorPlatformName(platform: NodeJS.Platform, env: NodeJS.ProcessEnv): string {
+  if (platform === "win32") return "windows";
+  if (platform === "darwin") return "macos";
+  if (platform === "linux" && isWslEnv(env)) return "wsl";
+  if (platform === "linux") return "linux";
+  return platform;
+}
+
+function expectedNativeCommandRegex(platformName: string): RegExp {
+  if (platformName === "windows") return /codex-hud\.cmd\s+native/;
+  return /codex-hud\s+native/;
+}
+
+function doctorPathIssues({
+  codexHudPath,
+  codexPath,
+  patchedCodexPath,
+  platformName,
+}: {
+  codexHudPath?: string;
+  codexPath?: string;
+  patchedCodexPath: string;
+  platformName: string;
+}): string[] {
+  if (platformName !== "wsl") return [];
+  const paths = [codexPath, codexHudPath, patchedCodexPath].filter((value): value is string => Boolean(value));
+  if (paths.some(isWindowsPathFromWsl)) {
+    return ["WSL Codex path points at a Windows install; install Codex HUD inside WSL and keep it separate from PowerShell/CMD."];
+  }
+  return [];
+}
+
+function isWindowsPathFromWsl(value: string): boolean {
+  return /^\/mnt\/[a-z]\//i.test(value) || /^[A-Za-z]:[\\/]/.test(value) || /\.cmd(?:$|\s)/i.test(value);
+}
+
+function isWslEnv(env: NodeJS.ProcessEnv): boolean {
+  return Boolean(env.WSL_DISTRO_NAME || env.WSL_INTEROP || env.WSLENV);
 }
 
 async function readOptionalText(target: string): Promise<string | undefined> {

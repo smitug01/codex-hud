@@ -27,7 +27,7 @@ test("createDoctorReport reports detected codex binary and version", async () =>
 
   assert.equal(report.codexCli.found, true);
   assert.equal(report.codexCli.version, "0.131.0");
-  assert.equal(report.ok, true);
+  assert.equal(report.ok, false);
   assert.match(report.lines.join("\n"), /Codex CLI: 0.131.0/);
 });
 
@@ -70,6 +70,22 @@ test("createDoctorReport is not ready when the codex-hud shim is missing", async
 
   assert.equal(report.ok, false);
   assert.match(report.lines.join("\n"), /codex shim: not installed/);
+});
+
+test("createDoctorReport explains when codex at the shim path is not the HUD shim", async () => {
+  const report = await createDoctorReport({
+    resolveCodexPath: async () => "/tmp/bin/codex",
+    readCodexVersion: async () => "0.142.5",
+    resolveCodexHudPath: async () => "/tmp/bin/codex-hud",
+    codexHome: "/tmp/codex-home",
+    shimPath: "/tmp/bin/codex",
+    readTextFile: async () => "#!/bin/sh\nexec /tmp/official-codex \"$@\"\n",
+    pathExists: async (target) => target === "/tmp/codex-home",
+  });
+
+  assert.equal(report.ok, false);
+  assert.match(report.lines.join("\n"), /Codex resolves to the expected shim path, but that file is not a Codex HUD shim/);
+  assert.match(report.lines.join("\n"), /codex-hud install/);
 });
 
 test("createDoctorReport is not ready when the patched Codex binary is missing", async () => {
@@ -218,6 +234,6 @@ test("createDoctorReport uses Windows defaults for shim and patched Codex paths"
     pathExists: async () => false,
   });
 
-  assert.equal(report.codexShim.path, "C:\\Users\\me\\AppData\\Roaming/npm/codex.cmd");
-  assert.equal(report.patchedCodex.path, "C:\\Users\\me/Desktop/Github_repos/openai-codex/codex-rs/target/release/codex.exe");
+  assert.equal(report.codexShim.path, "C:\\Users\\me\\AppData\\Roaming\\npm\\codex.cmd");
+  assert.equal(report.patchedCodex.path, "C:\\Users\\me\\Desktop\\Github_repos\\openai-codex\\codex-rs\\target\\release\\codex.exe");
 });

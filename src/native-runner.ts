@@ -1,5 +1,5 @@
 import { spawn } from "node:child_process";
-import { chmod, mkdir, readFile, rename, rm, writeFile } from "node:fs/promises";
+import { chmod, lstat, mkdir, readFile, realpath, rename, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -93,7 +93,7 @@ export function resolveNativeCodexPath(
   if (env.CODEX_HUD_CODEX_PATH) return env.CODEX_HUD_CODEX_PATH;
   const platform = options.platform ?? process.platform;
   const codexBinary = platform === "win32" ? "codex.exe" : "codex";
-  return path.join(
+  return platformPath(platform).join(
     options.homeDir ?? os.homedir(),
     "Desktop",
     "Github_repos",
@@ -125,7 +125,7 @@ export function defaultShimBinDir(options: Pick<ShimOptions, "env" | "platform">
   const platform = options.platform ?? process.platform;
   const env = options.env ?? process.env;
   if (platform === "win32" && env.APPDATA) {
-    return path.join(env.APPDATA, "npm");
+    return path.win32.join(env.APPDATA, "npm");
   }
   return path.join(os.homedir(), ".local", "bin");
 }
@@ -150,7 +150,7 @@ export function buildShimScript(options: { codexPath: string; platform?: NodeJS.
 
 export async function installCodexShim(options: ShimOptions = {}): Promise<ShimResult> {
   const binDir = options.binDir ?? defaultShimBinDir({ env: options.env, platform: options.platform });
-  const shimPath = path.join(binDir, isWindows(options.platform) ? "codex.cmd" : "codex");
+  const shimPath = joinForBase(binDir, options.platform, isWindows(options.platform) ? "codex.cmd" : "codex");
   const backupPath = backupShimPath(shimPath);
   const codexPath = resolveNativeCodexPath(options.codexPath, {
     env: options.env,
@@ -164,9 +164,14 @@ export async function installCodexShim(options: ShimOptions = {}): Promise<ShimR
   if (existing !== undefined) {
     if (!existing.includes(SHIM_MARKER)) {
       if (await readOptionalFile(backupPath) !== undefined) {
-        throw new Error(`codex already exists at ${shimPath} and backup already exists at ${backupPath}`);
+        if (await pathsResolveToSameFile(shimPath, backupPath)) {
+          await rm(shimPath, { force: true });
+        } else {
+          throw new Error(`codex already exists at ${shimPath} and backup already exists at ${backupPath}`);
+        }
+      } else {
+        await rename(shimPath, backupPath);
       }
-      await rename(shimPath, backupPath);
     }
     if (existing === script) {
       return { changed: false, path: shimPath };
@@ -180,7 +185,7 @@ export async function installCodexShim(options: ShimOptions = {}): Promise<ShimR
 
 export async function removeCodexShim(options: Pick<ShimOptions, "binDir" | "platform"> = {}): Promise<RemoveShimResult> {
   const binDir = options.binDir ?? defaultShimBinDir({ platform: options.platform });
-  const shimPath = path.join(binDir, isWindows(options.platform) ? "codex.cmd" : "codex");
+  const shimPath = joinForBase(binDir, options.platform, isWindows(options.platform) ? "codex.cmd" : "codex");
   const backupPath = backupShimPath(shimPath);
   const existing = await readOptionalFile(shimPath);
   if (existing === undefined || !existing.includes(SHIM_MARKER)) {
@@ -198,6 +203,21 @@ function isWindows(platform: NodeJS.Platform | undefined): boolean {
   return (platform ?? process.platform) === "win32";
 }
 
+function platformPath(platform: NodeJS.Platform | undefined): typeof path {
+  return isWindows(platform) ? path.win32 : path;
+}
+
+export function joinForBase(base: string, platform: NodeJS.Platform | undefined, ...parts: string[]): string {
+  if (isWindows(platform) && !isPosixAbsolutePath(base)) {
+    return path.win32.join(base, ...parts);
+  }
+  return path.join(base, ...parts);
+}
+
+function isPosixAbsolutePath(value: string): boolean {
+  return value.startsWith("/");
+}
+
 function quoteCmdArg(value: string): string {
   return `"${value.replace(/"/g, '""')}"`;
 }
@@ -211,6 +231,21 @@ async function readOptionalFile(filePath: string): Promise<string | undefined> {
     return await readFile(filePath, "utf8");
   } catch {
     return undefined;
+  }
+}
+
+async function pathsResolveToSameFile(left: string, right: string): Promise<boolean> {
+  try {
+    const [leftStat, rightStat, leftRealPath, rightRealPath] = await Promise.all([
+      lstat(left),
+      lstat(right),
+      realpath(left),
+      realpath(right),
+    ]);
+    if (leftRealPath !== rightRealPath) return false;
+    return leftStat.isSymbolicLink() || rightStat.isSymbolicLink();
+  } catch {
+    return false;
   }
 }
 

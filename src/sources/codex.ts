@@ -4,7 +4,7 @@ import path from "node:path";
 import os from "node:os";
 import { promisify } from "node:util";
 import type { HudConfig } from "../config.js";
-import { defaultShimBinDir, resolveNativeCodexPath } from "../native-runner.js";
+import { defaultShimBinDir, joinForBase, resolveNativeCodexPath } from "../native-runner.js";
 
 const execFileAsync = promisify(execFile);
 
@@ -162,7 +162,11 @@ export async function createDoctorReport(deps: DoctorDeps = {}): Promise<DoctorR
   const version = codexPath ? await (deps.readCodexVersion ?? (() => readCodexVersion(platform)))() : undefined;
   const exists = deps.pathExists ?? pathExists;
   const homeExists = await exists(codexHome);
-  const shimPath = deps.shimPath ?? path.join(defaultShimBinDir({ env, platform }), platform === "win32" ? "codex.cmd" : "codex");
+  const shimPath = deps.shimPath ?? joinForBase(
+    defaultShimBinDir({ env, platform }),
+    platform,
+    platform === "win32" ? "codex.cmd" : "codex",
+  );
   const shimText = await (deps.readTextFile ?? readOptionalText)(shimPath);
   const shimInstalled = Boolean(shimText?.includes("codex-hud shim"));
   const patchedCodexPath = parseShimCodexPath(shimText)
@@ -196,6 +200,11 @@ export async function createDoctorReport(deps: DoctorDeps = {}): Promise<DoctorR
     lines.push(`codex shim installed at ${shimPath}`);
   } else {
     lines.push(`codex shim: not installed at ${shimPath}`);
+    if (codexPath && sameCommandPath(codexPath, shimPath)) {
+      lines.push(`Codex resolves to the expected shim path, but that file is not a Codex HUD shim. Run ${installCommand(platformName)} to restore the full README-style footer.`);
+    } else {
+      lines.push(`Run ${installCommand(platformName)} and make sure ${shimDirectoryHint(platformName)} appears before the official Codex binary in PATH.`);
+    }
   }
   if (patchedCodexFound) {
     lines.push(`patched Codex found at ${patchedCodexPath}`);
@@ -276,6 +285,18 @@ function doctorPathIssues({
     return ["WSL Codex path points at a Windows install; install Codex HUD inside WSL and keep it separate from PowerShell/CMD."];
   }
   return [];
+}
+
+function installCommand(platformName: string): string {
+  return platformName === "windows" ? "codex-hud.cmd install" : "codex-hud install";
+}
+
+function shimDirectoryHint(platformName: string): string {
+  return platformName === "windows" ? "%APPDATA%\\npm" : "~/.local/bin";
+}
+
+function sameCommandPath(left: string, right: string): boolean {
+  return left.replace(/\\/g, "/") === right.replace(/\\/g, "/");
 }
 
 function isWindowsPathFromWsl(value: string): boolean {

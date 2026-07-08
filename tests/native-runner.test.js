@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 import {
@@ -92,7 +92,7 @@ test("defaultShimBinDir uses npm global shim directory on Windows", () => {
       env: { APPDATA: "C:\\Users\\me\\AppData\\Roaming" },
       platform: "win32",
     }),
-    "C:\\Users\\me\\AppData\\Roaming/npm",
+    "C:\\Users\\me\\AppData\\Roaming\\npm",
   );
 });
 
@@ -103,7 +103,7 @@ test("resolveNativeCodexPath uses codex.exe on Windows by default", () => {
       homeDir: "C:\\Users\\me",
       platform: "win32",
     }),
-    "C:\\Users\\me/Desktop/Github_repos/openai-codex/codex-rs/target/release/codex.exe",
+    "C:\\Users\\me\\Desktop\\Github_repos\\openai-codex\\codex-rs\\target\\release\\codex.exe",
   );
 });
 
@@ -171,6 +171,30 @@ test("installCodexShim backs up and replaces an existing official codex shim", a
     const removed = await removeCodexShim({ binDir: dir, platform: "win32" });
     assert.equal(removed.removed, true);
     assert.equal(await readFile(shimPath, "utf8"), officialShim);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
+test("installCodexShim replaces current codex when backup already points at the same binary", async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), "codex-hud-shim-"));
+
+  try {
+    const officialCodex = path.join(dir, "official-codex");
+    const shimPath = path.join(dir, "codex");
+    const backupPath = path.join(dir, "codex.codex-hud-backup");
+    await writeFile(officialCodex, "#!/bin/sh\n", "utf8");
+    await symlink(officialCodex, shimPath);
+    await symlink(officialCodex, backupPath);
+
+    const result = await installCodexShim({
+      binDir: dir,
+      codexPath: "/tmp/patched-codex",
+    });
+
+    assert.equal(result.changed, true);
+    assert.match(await readFile(shimPath, "utf8"), /codex-hud shim/);
+    assert.equal(await readFile(backupPath, "utf8"), "#!/bin/sh\n");
   } finally {
     await rm(dir, { recursive: true, force: true });
   }

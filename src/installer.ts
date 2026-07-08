@@ -6,7 +6,7 @@ import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 import { fileURLToPath } from "node:url";
-import { defaultShimBinDir, installCodexShim } from "./native-runner.js";
+import { defaultShimBinDir, installCodexShim, joinForBase } from "./native-runner.js";
 import { shellQuote } from "./tmux-runner.js";
 
 export interface ProductInstallOptions {
@@ -57,14 +57,14 @@ export function buildInstallPlan(options: ProductInstallOptions): ProductInstall
   const platform = options.platform ?? process.platform;
   const codexSource = options.codexSource ?? defaultCodexSource();
   const codexBinaryName = platform === "win32" ? "codex.exe" : "codex";
-  const codexBinary = path.join(codexSource, "codex-rs", "target", "release", codexBinaryName);
+  const codexBinary = joinForBase(codexSource, platform, "codex-rs", "target", "release", codexBinaryName);
   const binDir = options.binDir ?? defaultShimBinDir({ env: options.env, platform });
   const shimName = platform === "win32" ? "codex.cmd" : "codex";
 
   return {
     codexSource,
     codexBinary,
-    shimPath: path.join(binDir, shimName),
+    shimPath: joinForBase(binDir, platform, shimName),
     commands: [
       ["git", "clone", "--depth", "1", "--branch", "rust-v0.131.0", "https://github.com/openai/codex.git", codexSource],
       ["git", "apply", "patches/codex-cli-command-statusline.patch"],

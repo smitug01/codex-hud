@@ -44,8 +44,8 @@ test("buildInstallPlan points at Windows patched Codex binary and cmd shim", () 
     platform: "win32",
   });
 
-  assert.equal(plan.codexBinary, "C:\\Users\\me\\openai-codex/codex-rs/target/release/codex.exe");
-  assert.equal(plan.shimPath, "C:\\Users\\me\\bin/codex.cmd");
+  assert.equal(plan.codexBinary, "C:\\Users\\me\\openai-codex\\codex-rs\\target\\release\\codex.exe");
+  assert.equal(plan.shimPath, "C:\\Users\\me\\bin\\codex.cmd");
 });
 
 test("buildInstallPlan defaults to the npm global shim directory on Windows", () => {
@@ -56,7 +56,7 @@ test("buildInstallPlan defaults to the npm global shim directory on Windows", ()
     platform: "win32",
   });
 
-  assert.equal(plan.shimPath, "C:\\Users\\me\\AppData\\Roaming/npm/codex.cmd");
+  assert.equal(plan.shimPath, "C:\\Users\\me\\AppData\\Roaming\\npm\\codex.cmd");
 });
 
 test("buildInstallPlan applies bundled Codex patch before building", () => {

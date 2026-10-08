@@ -1,3 +1,5 @@
+> **Status: native rebuild experiment paused.** Use `codex-hud run` with the official Codex CLI for normal use. Native-build CI is disabled and no native release has been published. The experimental patch and security review below are retained for reference, not presented as a finished release.
+
 # Codex HUD for Codex 0.161.0 — hardened macOS fork
 
 A native, live, three-row HUD below the Codex composer, using Codex **0.161.0**. This fork ports the display from [Jiawang1209/codex-hud](https://github.com/Jiawang1209/codex-hud) and replaces its shell-based renderer bridge with a bounded, asynchronous, restricted subprocess.
@@ -52,7 +54,7 @@ cargo test --locked --release -p codex-tui --lib status_surface
 
 Use `node dist/index.js native --codex /absolute/path/to/patched/codex --` to launch from a source checkout. Native mode requires macOS and Node.js 24+.
 
-GitHub Actions builds/tests on pushes to `main`, PRs and manual dispatch. A version tag matching `v*-hud.*` additionally publishes a release after the build and tests pass, including SHA-256 checksums and source/build metadata. Publishing to npm is disabled for this fork.
+GitHub Actions builds/tests on pushes to `main`, PRs and manual dispatch. A version tag matching `v*-hud.*` additionally publishes a release after the build and tests pass, including SHA-256 checksums and source/build metadata. A maintainer can also run **Publish verified native build** with a successful main build run ID and a version tag; it verifies that the build matches current main, checks the downloaded checksums, and publishes those same tested artifacts without rebuilding. Publishing to npm is disabled for this fork.
 
 ## License
 

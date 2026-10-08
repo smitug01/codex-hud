@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+bundle_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+node_binary=$(command -v node)
+node_major=$("$node_binary" -p 'process.versions.node.split(".")[0]')
+if [ "$node_major" -lt 24 ]; then
+  echo 'Native HUD requires Node.js 24 or newer.' >&2
+  exit 1
+fi
+if [ "$(uname -s)" != Darwin ]; then
+  echo 'This hardened native bundle supports macOS.' >&2
+  exit 1
+fi
+export CODEX_NATIVE_HUD_NODE="$node_binary"
+export CODEX_NATIVE_HUD_SCRIPT="$bundle_dir/native-renderer.mjs"
+exec "$bundle_dir/bin/codex" "$@"

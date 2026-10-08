@@ -66,7 +66,7 @@ test("buildInstallPlan applies bundled Codex patch before building", () => {
   });
 
   assert.deepEqual(plan.commands[1], ["git", "apply", "patches/codex-cli-command-statusline.patch"]);
-  assert.deepEqual(plan.commands[2], ["cargo", "build", "--release", "-p", "codex-cli"]);
+  assert.deepEqual(plan.commands[2], ["cargo", "build", "--locked", "--release", "-p", "codex-cli"]);
 });
 
 test("patchActionFromChecks treats reverse-applicable patch as already installed", () => {
@@ -75,13 +75,12 @@ test("patchActionFromChecks treats reverse-applicable patch as already installed
   assert.equal(patchActionFromChecks(false, false), "conflict");
 });
 
-test("bundled Codex patch runs command-backed status lines through cmd.exe on Windows", async () => {
+test("bundled Codex patch removes shell execution and bounds the renderer", async () => {
   const patch = await readFile("patches/codex-cli-command-statusline.patch", "utf8");
-
-  assert.match(patch, /cfg!\(windows\)/);
-  assert.match(patch, /Command::new\("cmd"\)/);
-  assert.match(patch, /\.arg\("\/C"\)/);
-  assert.match(patch, /Command::new\("sh"\)/);
+  assert.doesNotMatch(patch, /Command::new\("(?:sh|cmd)"\)/);
+  assert.match(patch, /env_clear/);
+  assert.match(patch, /deny network/);
+  assert.match(patch, /kill_on_drop/);
 });
 
 test("bundled Codex patch hunk headers match the patched line counts", async () => {
@@ -127,27 +126,7 @@ test("bundled Codex patch hunk headers match the patched line counts", async () 
   }
 });
 
-test("validateNativePatchIntegrity catches a truncated command status-line patch", async () => {
+test("validateNativePatchIntegrity rejects legacy patch", async () => {
   const dir = await mkdtemp(path.join(os.tmpdir(), "codex-hud-native-"));
-  const chatwidgetDir = path.join(dir, "codex-rs", "tui", "src", "chatwidget");
-  await mkdir(chatwidgetDir, { recursive: true });
-  await writeFile(
-    path.join(chatwidgetDir, "status_surfaces.rs"),
-    [
-      'const STATUS_LINE_COMMAND_PREFIX: &str = "command:";',
-      "fn status_line_command_output(command: &str, cwd: &Path) -> Option<Vec<Line<'static>>> {",
-      "    None",
-      "}",
-      'let output = status_line_command_output("printf");',
-      '    .expect("status line output");',
-      "",
-    ].join("\n"),
-    "utf8",
-  );
-
-  const errors = await validateNativePatchIntegrity(dir);
-
-  assert.deepEqual(errors, [
-    "codex-rs/tui/src/chatwidget/status_surfaces.rs is missing the completed ANSI style assertion",
-  ]);
+  assert.deepEqual(await validateNativePatchIntegrity(dir), ["codex-rs/tui/src/chatwidget/native_hud.rs is missing"]);
 });

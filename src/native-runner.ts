@@ -3,6 +3,7 @@ import { chmod, lstat, mkdir, readFile, realpath, rename, rm, writeFile } from "
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
 import { shellQuote } from "./tmux-runner.js";
 
 export interface NativeOptions {
@@ -30,8 +31,6 @@ export interface RemoveShimResult {
   removed: boolean;
 }
 
-const HUD_STATUS_LINE_CONFIG = 'tui.status_line=["command: codex-hud status"]';
-const WINDOWS_HUD_STATUS_LINE_CONFIG = 'tui.status_line=["command: codex-hud.cmd status"]';
 const SHIM_MARKER = "codex-hud shim";
 
 export function parseNativeArgs(args: string[]): NativeOptions {
@@ -80,8 +79,7 @@ export function buildNativeCodexArgs(
   codexArgs: string[],
   options: Pick<ShimOptions, "platform"> = {},
 ): string[] {
-  const statusLineConfig = isWindows(options.platform) ? WINDOWS_HUD_STATUS_LINE_CONFIG : HUD_STATUS_LINE_CONFIG;
-  return ["-c", statusLineConfig, ...codexArgs];
+  return [...codexArgs];
 }
 
 export function resolveNativeCodexPath(
@@ -95,9 +93,9 @@ export function resolveNativeCodexPath(
   const codexBinary = platform === "win32" ? "codex.exe" : "codex";
   return platformPath(platform).join(
     options.homeDir ?? os.homedir(),
-    "Desktop",
-    "Github_repos",
-    "openai-codex",
+    ".codex-hud",
+    "native",
+    "openai-codex-0.161.0",
     "codex-rs",
     "target",
     "release",
@@ -115,9 +113,16 @@ export async function runNativeCodex(options: NativeOptions): Promise<number> {
     return 0;
   }
 
+  if (platform !== "darwin") {
+    throw new Error("The hardened native release currently supports macOS only; use pane mode on other platforms.");
+  }
+  if (Number(process.versions.node.split(".")[0]) < 24) {
+    throw new Error("Native HUD requires Node.js 24+ for the permission boundary.");
+  }
   return await spawnInherited(codexPath, args, {
     ...process.env,
-    CODEX_HUD_FORCE_COLOR: "1",
+    CODEX_NATIVE_HUD_NODE: process.execPath,
+    CODEX_NATIVE_HUD_SCRIPT: path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "native-renderer.mjs"),
   });
 }
 

@@ -1,15 +1,15 @@
 {
-  "name": "@jiawang1209/codex-hud",
-  "version": "0.1.11",
+  "name": "@smitug01/codex-hud",
+  "version": "0.1.12-hud.161.1",
   "description": "Real-time terminal HUD for Codex CLI and Agent CLI sessions.",
   "type": "module",
-  "homepage": "https://github.com/Jiawang1209/codex-hud",
+  "homepage": "https://github.com/smitug01/codex-hud",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jiawang1209/codex-hud.git"
+    "url": "git+https://github.com/smitug01/codex-hud.git"
   },
   "bugs": {
-    "url": "https://github.com/Jiawang1209/codex-hud/issues"
+    "url": "https://github.com/smitug01/codex-hud/issues"
   },
   "bin": {
     "codex-hud": "dist/index.js"
@@ -23,7 +23,8 @@
     "skills/",
     "CHANGELOG.md",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "native-renderer.mjs"
   ],
   "scripts": {
     "build": "tsc",
@@ -45,5 +46,6 @@
     "statusline",
     "terminal"
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "private": true
 }

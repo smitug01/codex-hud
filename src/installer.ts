@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { mkdir } from "node:fs/promises";
 import { readFile } from "node:fs/promises";
-import { spawn } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import os from "node:os";
 import path from "node:path";
 import process from "node:process";
@@ -50,7 +50,7 @@ export function parseInstallArgs(args: string[]): ProductInstallOptions {
 }
 
 export function defaultCodexSource(): string {
-  return path.join(os.homedir(), ".codex-hud", "native", "openai-codex");
+  return path.join(os.homedir(), ".codex-hud", "native", "openai-codex-0.161.0");
 }
 
 export function buildInstallPlan(options: ProductInstallOptions): ProductInstallPlan {
@@ -66,9 +66,9 @@ export function buildInstallPlan(options: ProductInstallOptions): ProductInstall
     codexBinary,
     shimPath: joinForBase(binDir, platform, shimName),
     commands: [
-      ["git", "clone", "--depth", "1", "--branch", "rust-v0.131.0", "https://github.com/openai/codex.git", codexSource],
+      ["git", "clone", "--depth", "1", "--branch", "rust-v0.161.0", "https://github.com/openai/codex.git", codexSource],
       ["git", "apply", "patches/codex-cli-command-statusline.patch"],
-      ["cargo", "build", "--release", "-p", "codex-cli"],
+      ["cargo", "build", "--locked", "--release", "-p", "codex-cli"],
     ],
   };
 }
@@ -95,12 +95,17 @@ export async function installProduct(options: ProductInstallOptions): Promise<nu
     if (code !== 0) return code;
   }
 
+  const expectedCommit = "979011409de0a60b52f179721948e65531d26144";
+  const actualCommit = execFileSync("git", ["rev-parse", "HEAD"], { cwd: plan.codexSource, encoding: "utf8" }).trim();
+  if (actualCommit !== expectedCommit) {
+    throw new Error(`Refusing unpinned Codex checkout: expected ${expectedCommit}, got ${actualCommit}`);
+  }
   const patchCode = await applyBundledPatch(plan.codexSource);
   if (patchCode !== 0) return patchCode;
 
   const buildCode = await spawnInherited(
     "cargo",
-    ["build", "--release", "-p", "codex-cli"],
+    ["build", "--locked", "--release", "-p", "codex-cli"],
     path.join(plan.codexSource, "codex-rs"),
   );
   if (buildCode !== 0) return buildCode;
@@ -157,25 +162,13 @@ async function finishPatchStep(codexSource: string, okMessage?: string): Promise
 }
 
 export async function validateNativePatchIntegrity(codexSource: string): Promise<string[]> {
-  const statusSurfacesPath = path.join(codexSource, "codex-rs", "tui", "src", "chatwidget", "status_surfaces.rs");
-  let statusSurfaces: string;
-  try {
-    statusSurfaces = await readFile(statusSurfacesPath, "utf8");
-  } catch {
-    return ["codex-rs/tui/src/chatwidget/status_surfaces.rs is missing"];
-  }
-
-  const errors: string[] = [];
-  if (!statusSurfaces.includes('const STATUS_LINE_COMMAND_PREFIX: &str = "command:";')) {
-    errors.push("codex-rs/tui/src/chatwidget/status_surfaces.rs is missing command status-line support");
-  }
-  if (!statusSurfaces.includes("fn status_line_command_output(command: &str, cwd: &Path)")) {
-    errors.push("codex-rs/tui/src/chatwidget/status_surfaces.rs is missing command output rendering");
-  }
-  if (!statusSurfaces.includes("assert_eq!(output[0].spans[0].style.fg, Some(Color::Magenta));")) {
-    errors.push("codex-rs/tui/src/chatwidget/status_surfaces.rs is missing the completed ANSI style assertion");
-  }
-  return errors;
+  const relative = "codex-rs/tui/src/chatwidget/native_hud.rs";
+  let source: string;
+  try { source = await readFile(path.join(codexSource, relative), "utf8"); }
+  catch { return [`${relative} is missing`]; }
+  return [".env_clear()", '.arg("--permission")', "tokio::time::timeout", ".kill_on_drop(true)", "MAX_OUTPUT", "deny network*"]
+    .filter(marker => !source.includes(marker))
+    .map(marker => `${relative} is missing protection: ${marker}`);
 }
 
 function installPlanText(plan: ProductInstallPlan): string {
@@ -192,7 +185,7 @@ function installPlanText(plan: ProductInstallPlan): string {
 function spawnInherited(command: string, args: string[], cwd: string): Promise<number> {
   return new Promise((resolve) => {
     const child = spawn(command, args, { cwd, stdio: "inherit" });
-    child.on("error", () => resolve(1));
+    child.on("error", (error) => { process.stderr.write(`codex-hud: ${command}: ${error.message}\n`); resolve(1); });
     child.on("exit", (code) => resolve(code ?? 1));
   });
 }
@@ -200,7 +193,7 @@ function spawnInherited(command: string, args: string[], cwd: string): Promise<n
 function spawnQuiet(command: string, args: string[], cwd: string): Promise<number> {
   return new Promise((resolve) => {
     const child = spawn(command, args, { cwd, stdio: "ignore" });
-    child.on("error", () => resolve(1));
+    child.on("error", (error) => { process.stderr.write(`codex-hud: ${command}: ${error.message}\n`); resolve(1); });
     child.on("exit", (code) => resolve(code ?? 1));
   });
 }

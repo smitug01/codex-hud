@@ -1,291 +1,1560 @@
+diff --git a/codex-rs/Cargo.lock b/codex-rs/Cargo.lock
+index ae76b2d..de71964 100644
+--- a/codex-rs/Cargo.lock
++++ b/codex-rs/Cargo.lock
+@@ -268,7 +268,7 @@ checksum = "2a4385e2e34eb35d6b3efe798b9eb88096925d87726c0798709bf56d9ed84af3"
+ 
+ [[package]]
+ name = "app_test_support"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -1893,7 +1893,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-core",
+@@ -1905,7 +1905,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-graph-store"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "codex-state",
+@@ -1920,7 +1920,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-identity"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -1940,7 +1940,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-message-board-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -1963,7 +1963,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-message-board-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "caseless",
+@@ -1986,7 +1986,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-agent-roles"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-config",
+  "codex-file-system",
+@@ -1999,7 +1999,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-analytics"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-app-server-protocol",
+  "codex-git-utils",
+@@ -2021,7 +2021,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-ansi-escape"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "ansi-to-tui",
+  "pretty_assertions",
+@@ -2032,7 +2032,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-api"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "assert_matches",
+@@ -2070,7 +2070,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "app_test_support",
+@@ -2183,7 +2183,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-app-server",
+  "codex-app-server-protocol",
+@@ -2210,7 +2210,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-daemon"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "blake3",
+@@ -2235,7 +2235,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-protocol"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-app-server-protocol-noop-macros",
+@@ -2269,11 +2269,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-protocol-noop-macros"
+-version = "0.0.0"
++version = "0.161.0"
+ 
+ [[package]]
+ name = "codex-app-server-test-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -2295,7 +2295,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-app-server-transport"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "axum",
+  "base64 0.22.1",
+@@ -2337,7 +2337,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-apply-patch"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "assert_cmd",
+@@ -2357,7 +2357,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-arg0"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-apply-patch",
+@@ -2380,7 +2380,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-async-utils"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "rand 0.9.3",
+@@ -2390,7 +2390,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-attachment-store"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "serde",
+@@ -2400,7 +2400,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-aws-auth"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "aws-config",
+  "aws-credential-types",
+@@ -2426,7 +2426,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-backend-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-api",
+@@ -2446,7 +2446,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-backend-openapi-models"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "serde",
+  "serde_json",
+@@ -2455,7 +2455,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-build-info"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-install-context",
+  "pretty_assertions",
+@@ -2468,7 +2468,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-bwrap"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "cc",
+  "libc",
+@@ -2477,7 +2477,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-chatgpt"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -2499,7 +2499,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cli"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "app_test_support",
+@@ -2601,7 +2601,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-http-client",
+  "eventsource-stream",
+@@ -2615,7 +2615,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-config"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "chrono",
+@@ -2641,7 +2641,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-tasks"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -2674,7 +2674,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-tasks-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -2689,7 +2689,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-cloud-tasks-mock-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "chrono",
+  "codex-cloud-tasks-client",
+@@ -2698,7 +2698,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-code-mode-protocol",
+  "codex-http-client",
+@@ -2721,7 +2721,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode-host"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -2750,7 +2750,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode-protocol"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "glob",
+@@ -2768,7 +2768,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-code-mode-runtime"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-code-mode-protocol",
+@@ -2786,11 +2786,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-collaboration-mode-templates"
+-version = "0.0.0"
++version = "0.161.0"
+ 
+ [[package]]
+ name = "codex-config"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -2840,7 +2840,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-config-schema"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -2849,7 +2849,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-connectors"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -2871,7 +2871,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-connectors-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-connectors",
+  "codex-core-plugins",
+@@ -2885,7 +2885,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-context-fragments"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "codex-utils-string",
+@@ -2895,7 +2895,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -3035,7 +3035,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core-api"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-analytics",
+  "codex-app-server-protocol",
+@@ -3058,7 +3058,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core-plugin-common"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "semver",
+@@ -3069,7 +3069,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-core-plugins"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3125,7 +3125,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-diagnostics"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "libc",
+  "pretty_assertions",
+@@ -3133,7 +3133,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "assert_cmd",
+@@ -3185,7 +3185,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec-server"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -3254,7 +3254,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec-server-protocol"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-file-system",
+@@ -3271,7 +3271,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-exec-server-test-support"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-exec-server",
+@@ -3286,7 +3286,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-execpolicy"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -3304,7 +3304,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-experimental-api-macros"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -3313,7 +3313,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-extension-api"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-api",
+  "codex-config",
+@@ -3335,7 +3335,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-extension-items"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "pretty_assertions",
+@@ -3347,7 +3347,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-external-agent-migration"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "chrono",
+  "codex-analytics",
+@@ -3377,7 +3377,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-features"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-network-proxy",
+  "codex-protocol",
+@@ -3391,7 +3391,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-feedback"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "bytes",
+@@ -3416,7 +3416,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-file-search"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -3432,7 +3432,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-file-system"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "bytes",
+  "codex-protocol",
+@@ -3444,7 +3444,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-file-watcher"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "notify",
+  "pretty_assertions",
+@@ -3455,7 +3455,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-git-attribution"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-backend-client",
+  "codex-extension-api",
+@@ -3468,7 +3468,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-git-utils"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3495,7 +3495,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-goal-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3520,7 +3520,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-guardian-context"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-context-fragments",
+  "codex-history",
+@@ -3531,7 +3531,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-guardian-reviewer"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-analytics",
+@@ -3556,7 +3556,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-guardian-v2"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-analytics",
+@@ -3592,7 +3592,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-history"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-protocol",
+@@ -3604,7 +3604,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-history-notes-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-analytics",
+  "codex-client",
+@@ -3629,7 +3629,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-home"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-extension-api",
+  "codex-utils-absolute-path",
+@@ -3641,7 +3641,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-hooks"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "async-channel",
+@@ -3669,7 +3669,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-http-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "bytes",
+  "codex-utils-cargo-bin",
+@@ -3705,7 +3705,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-image-generation-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-api",
+@@ -3733,7 +3733,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-install-context"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "codex-utils-home-dir",
+@@ -3746,7 +3746,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-keyring-store"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "keyring",
+  "pretty_assertions",
+@@ -3757,7 +3757,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-linux-sandbox"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "clap",
+  "codex-core",
+@@ -3786,7 +3786,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-lmstudio"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-core",
+  "codex-http-client",
+@@ -3800,7 +3800,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-login"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -3845,7 +3845,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mcp"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "arc-swap",
+@@ -3885,7 +3885,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mcp-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -3918,7 +3918,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-memories-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-core",
+  "codex-extension-api",
+@@ -3940,7 +3940,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-memories-read"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "codex-shell-command",
+@@ -3950,7 +3950,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-memories-write"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -3987,7 +3987,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mermaid"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "insta",
+  "pretty_assertions",
+@@ -3996,7 +3996,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-message-history"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-config",
+  "memchr",
+@@ -4010,7 +4010,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-model-provider"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "chrono",
+@@ -4043,7 +4043,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-model-provider-info"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-client",
+  "codex-protocol",
+@@ -4061,7 +4061,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-models-manager"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "chrono",
+  "codex-http-client",
+@@ -4080,7 +4080,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-mxc-sandbox"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "appcontainer_common",
+@@ -4102,7 +4102,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-network-proxy"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -4151,7 +4151,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-ollama"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "assert_matches",
+  "async-stream",
+@@ -4171,7 +4171,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-otel"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "bytes",
+  "chrono",
+@@ -4208,7 +4208,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-otel-trace-websocket"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -4219,7 +4219,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-plugin"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-config",
+  "codex-core-plugin-common",
+@@ -4234,7 +4234,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-process-hardening"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "libc",
+  "pretty_assertions",
+@@ -4242,7 +4242,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-prompts"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-collaboration-mode-templates",
+@@ -4259,7 +4259,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-protocol"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chardetng",
+@@ -4304,7 +4304,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-queue-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-core",
+@@ -4325,7 +4325,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-realtime-webrtc"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-build-info",
+@@ -4343,7 +4343,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-response-debug-context"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-api",
+@@ -4354,7 +4354,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-responses-api-proxy"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -4371,7 +4371,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-rmcp-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "axum",
+@@ -4422,7 +4422,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-rollout"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -4451,7 +4451,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-rollout-trace"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-code-mode",
+@@ -4467,7 +4467,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-sandboxing"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-mxc-sandbox",
+@@ -4494,7 +4494,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-secrets"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "age",
+  "anyhow",
+@@ -4515,7 +4515,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-shell-command"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -4538,7 +4538,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-shell-escalation"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -4558,7 +4558,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-skills"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "codex-shell-command",
+@@ -4575,7 +4575,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-skills-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "assert_matches",
+  "blake3",
+@@ -4612,7 +4612,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-state"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "chrono",
+@@ -4639,7 +4639,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-stdio-to-uds"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-uds",
+@@ -4651,7 +4651,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-tcp-tunnel"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "bytes",
+@@ -4672,7 +4672,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-terminal-detection"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "tracing",
+@@ -4680,7 +4680,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-test-binary-support"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-arg0",
+  "tempfile",
+@@ -4688,7 +4688,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-thread-manager-sample"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "clap",
+@@ -4699,7 +4699,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-thread-store"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "chrono",
+  "codex-app-server-protocol",
+@@ -4730,7 +4730,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-tools"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "bitflags 2.13.1",
+  "codex-code-mode",
+@@ -4756,7 +4756,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-tui"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "app_test_support",
+@@ -4882,7 +4882,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-uds"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "async-io",
+  "libc",
+@@ -4896,7 +4896,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-user-verification"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "core-foundation 0.10.1",
+@@ -4916,7 +4916,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-absolute-path"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "dirs",
+  "dunce",
+@@ -4930,14 +4930,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-approval-presets"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+ ]
+ 
+ [[package]]
+ name = "codex-utils-audio"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-protocol",
+@@ -4951,7 +4951,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-cache"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "lru",
+  "sha1 0.10.6",
+@@ -4960,7 +4960,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-cargo-bin"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "assert_cmd",
+  "runfiles",
+@@ -4969,7 +4969,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-cli"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "clap",
+  "codex-protocol",
+@@ -4981,15 +4981,15 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-elapsed"
+-version = "0.0.0"
++version = "0.161.0"
+ 
+ [[package]]
+ name = "codex-utils-fuzzy-match"
+-version = "0.0.0"
++version = "0.161.0"
+ 
+ [[package]]
+ name = "codex-utils-git-discovery"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-git-utils",
+  "codex-utils-absolute-path",
+@@ -5002,7 +5002,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-home-dir"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "dirs",
+@@ -5012,7 +5012,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-image"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-utils-cache",
+@@ -5026,7 +5026,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-json-to-toml"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "serde_json",
+@@ -5035,7 +5035,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-oss"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-core",
+  "codex-lmstudio",
+@@ -5045,7 +5045,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-output-truncation"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "codex-utils-string",
+@@ -5054,7 +5054,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-path"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-utils-absolute-path",
+  "dunce",
+@@ -5065,7 +5065,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-path-uri"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "base64 0.22.1",
+  "codex-utils-absolute-path",
+@@ -5081,7 +5081,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-plugins"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-exec-server",
+  "codex-exec-server-protocol",
+@@ -5095,7 +5095,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-process"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "tokio",
+@@ -5103,7 +5103,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-pty"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "ctor 0.6.3",
+@@ -5121,7 +5121,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-readiness"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "assert_matches",
+  "thiserror 2.0.18",
+@@ -5131,7 +5131,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-redacted-string"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "schemars 0.8.22",
+  "serde",
+@@ -5139,14 +5139,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-rustls-provider"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "rustls",
+ ]
+ 
+ [[package]]
+ name = "codex-utils-sandbox-summary"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-protocol",
+  "codex-utils-absolute-path",
+@@ -5156,7 +5156,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-sleep-inhibitor"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "core-foundation 0.9.4",
+  "libc",
+@@ -5166,14 +5166,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-stream-parser"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+ ]
+ 
+ [[package]]
+ name = "codex-utils-string"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "regex-lite",
+@@ -5183,14 +5183,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-utils-template"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+ ]
+ 
+ [[package]]
+ name = "codex-v8-poc"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "pretty_assertions",
+  "v8",
+@@ -5198,7 +5198,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-voice-host"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-install-context",
+@@ -5225,7 +5225,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-web-search-extension"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-api",
+  "codex-core",
+@@ -5247,7 +5247,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-websocket-auth"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -5266,7 +5266,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-websocket-client"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-http-client",
+  "codex-utils-rustls-provider",
+@@ -5282,7 +5282,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-windows-sandbox"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "base64 0.22.1",
+@@ -5311,7 +5311,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-windows-sandbox-service"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-cloud-config",
+@@ -5328,14 +5328,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-windows-sandbox-test-support"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "dirs",
+ ]
+ 
+ [[package]]
+ name = "codex-workload-identity"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "codex-http-client",
+  "pretty_assertions",
+@@ -5350,7 +5350,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "codex-worktree"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "codex-git-utils",
+@@ -5590,7 +5590,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "core_test_support"
+-version = "0.0.0"
++version = "0.161.0"
+ dependencies = [
+  "anyhow",
+  "assert_cmd",
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer.rs b/codex-rs/tui/src/bottom_pane/chat_composer.rs
-index e76b4c0..69b283c 100644
+index 8921eaa..d606bc9 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer.rs
-@@ -177,11 +177,12 @@ use super::footer::footer_hint_items_width;
- use super::footer::footer_line_width;
- use super::footer::inset_footer_hint_area;
- use super::footer::max_left_width_for_right;
--use super::footer::passive_footer_status_line;
-+use super::footer::passive_footer_status_lines;
- use super::footer::render_context_right;
- use super::footer::render_footer_from_props;
- use super::footer::render_footer_hint_items;
- use super::footer::render_footer_line;
-+use super::footer::render_footer_lines;
- use super::footer::reset_mode_after_activity;
- use super::footer::side_conversation_context_line;
- use super::footer::single_line_footer_layout;
-@@ -4154,10 +4155,14 @@ impl ChatComposer {
-     }
- 
-     pub(crate) fn set_status_line(&mut self, status_line: Option<Line<'static>>) -> bool {
--        if self.footer.status_line_value == status_line {
-+        self.set_status_lines(status_line.map(|line| vec![line]))
-+    }
-+
-+    pub(crate) fn set_status_lines(&mut self, status_lines: Option<Vec<Line<'static>>>) -> bool {
-+        if self.footer.status_line_value == status_lines {
-             return false;
-         }
--        self.footer.status_line_value = status_line;
-+        self.footer.status_line_value = status_lines;
-         true
-     }
- 
-@@ -4422,11 +4427,30 @@ impl ChatComposer {
-                     let available_width =
-                         hint_rect.width.saturating_sub(FOOTER_INDENT_COLS as u16) as usize;
-                     let status_line_active = uses_passive_footer_status_layout(&footer_props);
--                    let combined_status_line = if status_line_active {
--                        passive_footer_status_line(&footer_props)
-+                    let combined_status_lines = if status_line_active {
-+                        passive_footer_status_lines(&footer_props)
-                     } else {
-                         None
-                     };
-+                    let multi_line_status_lines = combined_status_lines
-+                        .as_ref()
-+                        .filter(|lines| lines.len() > 1)
-+                        .map(|lines| {
-+                            lines
-+                                .iter()
-+                                .cloned()
-+                                .map(|line| {
-+                                    truncate_line_with_ellipsis_if_overflow(
-+                                        line,
-+                                        available_width,
-+                                    )
-+                                })
-+                                .collect::<Vec<_>>()
-+                        });
-+                    let combined_status_line = combined_status_lines
-+                        .as_ref()
-+                        .and_then(|lines| lines.first())
-+                        .cloned();
-                     let mut truncated_status_line = if status_line_active {
-                         combined_status_line.as_ref().map(|line| {
-                             truncate_line_with_ellipsis_if_overflow(line.clone(), available_width)
-@@ -4467,6 +4491,8 @@ impl ChatComposer {
-                             Some(side_conversation_context_line(label))
-                         } else if let Some(line) = self.shell_mode_footer_line() {
-                             Some(line)
-+                        } else if multi_line_status_lines.is_some() {
-+                            None
-                         } else if status_line_active {
-                             let full = self.mode_indicator_line(show_cycle_hint);
-                             let compact = self.mode_indicator_line(/*show_cycle_hint*/ false);
-@@ -4538,7 +4564,9 @@ impl ChatComposer {
-                         match summary_left {
-                             SummaryLeft::Default => {
-                                 if status_line_active {
--                                    if let Some(line) = truncated_status_line.clone() {
-+                                    if let Some(lines) = multi_line_status_lines.clone() {
-+                                        render_footer_lines(hint_rect, buf, lines);
-+                                    } else if let Some(line) = truncated_status_line.clone() {
-                                         render_footer_line(hint_rect, buf, line);
-                                     } else {
-                                         render_footer_from_props(
-@@ -4575,7 +4603,9 @@ impl ChatComposer {
-                     } else if let Some(items) = active_footer_hint_override {
-                         render_footer_hint_items(hint_rect, buf, items);
-                     } else if status_line_active {
--                        if let Some(line) = truncated_status_line {
-+                        if let Some(lines) = multi_line_status_lines.clone() {
-+                            render_footer_lines(hint_rect, buf, lines);
-+                        } else if let Some(line) = truncated_status_line {
-                             render_footer_line(hint_rect, buf, line);
-                         }
-                     } else {
+@@ -742,6 +742,7 @@ impl ChatComposer {
+                 collaboration_mode_indicator: None,
+                 goal_status_indicator: None,
+                 ide_context_active: false,
++                native_hud_lines: Vec::new(),
+                 status_line_value: None,
+                 status_line_hyperlink_url: None,
+                 status_line_enabled: false,
 diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/footer_state.rs b/codex-rs/tui/src/bottom_pane/chat_composer/footer_state.rs
-index 113385f..4d94a30 100644
+index 1a22fd5..a7021d0 100644
 --- a/codex-rs/tui/src/bottom_pane/chat_composer/footer_state.rs
 +++ b/codex-rs/tui/src/bottom_pane/chat_composer/footer_state.rs
-@@ -25,7 +25,7 @@ pub(super) struct FooterState {
+@@ -215,6 +215,8 @@ pub(super) struct FooterState {
      pub(super) collaboration_mode_indicator: Option<CollaborationModeIndicator>,
      pub(super) goal_status_indicator: Option<GoalStatusIndicator>,
      pub(super) ide_context_active: bool,
--    pub(super) status_line_value: Option<Line<'static>>,
-+    pub(super) status_line_value: Option<Vec<Line<'static>>>,
++    /// Independently rendered, bounded native HUD rows; ordinary hints stay visible.
++    pub(super) native_hud_lines: Vec<Line<'static>>,
+     pub(super) status_line_value: Option<Line<'static>>,
      pub(super) status_line_hyperlink_url: Option<String>,
      pub(super) status_line_enabled: bool,
-     pub(super) side_conversation_context_label: Option<String>,
-@@ -63,11 +63,17 @@ impl FooterState {
+diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface.rs b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface.rs
+index 60ee2e0..7976ce9 100644
+--- a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface.rs
++++ b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface.rs
+@@ -1,11 +1,25 @@
+ //! Separate persistent transcript context from the composer's transient hint row.
+ //! Measurement, rendering, and cursor placement share the same reserved status rectangle.
+ //! Shortcut help grows above the input, preserving status and close rows below it even when clipped.
++//! The opt-in native HUD occupies up to three persistent rows, with input and transient hints
++//! taking priority when the terminal is too short. It never replaces the composer state machine.
  
-     #[cfg(test)]
-     pub(super) fn status_line_text(&self) -> Option<String> {
--        self.status_line_value.as_ref().map(|line| {
--            line.spans
-+        self.status_line_value.as_ref().map(|lines| {
-+            lines
-                 .iter()
--                .map(|span| span.content.as_ref())
--                .collect::<String>()
-+                .map(|line| {
-+                    line.spans
-+                        .iter()
-+                        .map(|span| span.content.as_ref())
-+                        .collect::<String>()
-+                })
-+                .collect::<Vec<_>>()
-+                .join("\n")
-         })
+ use super::*;
+ 
+ impl ChatComposer {
++    pub(crate) fn set_native_hud_lines(&mut self, lines: Vec<Line<'static>>) -> bool {
++        let lines = lines.into_iter().take(3).collect::<Vec<_>>();
++        if self.footer.native_hud_lines == lines {
++            return false;
++        }
++        self.footer.native_hud_lines = lines;
++        true
++    }
++
+     pub(super) fn status_surface_height(&self, options: ComposerRenderOptions<'_>) -> u16 {
++        if !self.footer.native_hud_lines.is_empty() {
++            return self.footer.native_hud_lines.len().min(3) as u16;
++        }
+         u16::from(options.separate_status_line && self.footer.status_line_enabled)
      }
- }
-diff --git a/codex-rs/tui/src/bottom_pane/footer.rs b/codex-rs/tui/src/bottom_pane/footer.rs
-index 0b6aabf..7834fcf 100644
---- a/codex-rs/tui/src/bottom_pane/footer.rs
-+++ b/codex-rs/tui/src/bottom_pane/footer.rs
-@@ -74,7 +74,7 @@ pub(crate) struct FooterProps {
-     ///
-     /// This is rendered when `mode` is `FooterMode::QuitShortcutReminder`.
-     pub(crate) quit_shortcut_key: KeyBinding,
--    pub(crate) status_line_value: Option<Line<'static>>,
-+    pub(crate) status_line_value: Option<Vec<Line<'static>>>,
-     pub(crate) status_line_enabled: bool,
-     pub(crate) key_hints: FooterKeyHints,
-     /// Active thread label shown when the footer is rendering contextual information instead of an
-@@ -261,6 +261,16 @@ pub(crate) fn render_footer_line(area: Rect, buf: &mut Buffer, line: Line<'stati
-     .render(area, buf);
- }
  
-+/// Render multiple precomputed footer lines.
-+pub(crate) fn render_footer_lines(area: Rect, buf: &mut Buffer, lines: Vec<Line<'static>>) {
-+    Paragraph::new(prefix_lines(
-+        lines,
-+        " ".repeat(FOOTER_INDENT_COLS).into(),
-+        " ".repeat(FOOTER_INDENT_COLS).into(),
-+    ))
-+    .render(area, buf);
+@@ -28,6 +42,30 @@ impl ChatComposer {
+         if area.is_empty() {
+             return;
+         }
++        if !self.footer.native_hud_lines.is_empty() {
++            for (offset, line) in self
++                .footer
++                .native_hud_lines
++                .iter()
++                .take(area.height as usize)
++                .enumerate()
++            {
++                let row = Rect {
++                    y: area.y + offset as u16,
++                    height: 1,
++                    ..area
++                };
++                render_footer_line(
++                    row,
++                    buf,
++                    truncate_line_with_ellipsis_if_overflow(
++                        line.clone(),
++                        inset_footer_hint_area(row).width as usize,
++                    ),
++                );
++            }
++            return;
++        }
+         let mut props = self.footer_props();
+         let show_cycle_hint = !props.is_task_running
+             && !self.blocks_direct_input
+diff --git a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
+index 03e761f..dac7193 100644
+--- a/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
++++ b/codex-rs/tui/src/bottom_pane/chat_composer/status_surface_tests.rs
+@@ -446,3 +446,33 @@ fn activity_shortcut_help_follows_runtime_binding() {
+     }
+     insta::assert_snapshot!(snapshots.join("\n---\n"));
+ }
++
++#[test]
++fn native_hud_preserves_three_rows_and_input_during_help() {
++    let mut composer = composer();
++    composer.set_native_hud_lines(vec![
++        Line::from("[gpt-6] project git:(main)"),
++        Line::from("Context 20% | Usage 10%"),
++        Line::from("Todos 1/3 | Exec active"),
++    ]);
++    let (normal, cursor) = render(&composer, 60, None);
++    assert!(cursor.is_some());
++    insta::assert_snapshot!("native_hud_three_rows", normal);
++    composer.handle_key_event(KeyEvent::new(KeyCode::Char('?'), KeyModifiers::NONE));
++    let (help, _) = render(&composer, 60, None);
++    assert!(help.contains("Todos 1/3 | Exec active"));
++    insta::assert_snapshot!("native_hud_shortcuts", help);
 +}
 +
- /// Render footer content directly from `FooterProps`.
- ///
- /// This is intentionally not part of the width-based collapse/fallback logic.
-@@ -711,8 +721,8 @@ fn footer_from_props_lines(
-     let key_hints = props.key_hints;
-     // Passive footer context can come from the configurable status line, the
-     // active agent label, or both combined.
--    if let Some(status_line) = passive_footer_status_line(props) {
--        return vec![status_line];
-+    if let Some(status_lines) = passive_footer_status_lines(props) {
-+        return status_lines;
-     }
-     match props.mode {
-         FooterMode::QuitShortcutReminder => {
-@@ -770,27 +780,27 @@ fn footer_from_props_lines(
- /// The returned line may contain the configured status line, the currently viewed agent label, or
- /// both combined. Active instructional states such as quit reminders, shortcut overlays, and queue
- /// prompts deliberately return `None` so those call-to-action hints stay visible.
--pub(crate) fn passive_footer_status_line(props: &FooterProps) -> Option<Line<'static>> {
-+pub(crate) fn passive_footer_status_lines(props: &FooterProps) -> Option<Vec<Line<'static>>> {
-     if !shows_passive_footer_line(props) {
-         return None;
-     }
- 
--    let mut line = if props.status_line_enabled {
-+    let mut lines = if props.status_line_enabled {
-         props.status_line_value.clone()
-     } else {
-         None
-     };
- 
-     if let Some(active_agent_label) = props.active_agent_label.as_ref() {
--        if let Some(existing) = line.as_mut() {
-+        if let Some(existing) = lines.as_mut().and_then(|lines| lines.last_mut()) {
-             existing.spans.push(" · ".dim());
-             existing.spans.push(active_agent_label.clone().dim());
-         } else {
--            line = Some(Line::from(active_agent_label.clone()).dim());
-+            lines = Some(vec![Line::from(active_agent_label.clone()).dim()]);
-         }
-     }
- 
--    line
-+    lines
- }
- 
- /// Whether the current footer mode allows contextual information to replace instructional hints.
-@@ -1314,7 +1324,7 @@ mod tests {
-                 };
-                 let status_line_active = uses_passive_footer_status_layout(props);
-                 let passive_status_line = if status_line_active {
--                    passive_footer_status_line(props)
-+                    passive_footer_status_lines(props).and_then(|lines| lines.into_iter().next())
-                 } else {
-                     None
-                 };
-@@ -1765,7 +1775,7 @@ mod tests {
-             collaboration_modes_enabled: false,
-             is_wsl: false,
-             quit_shortcut_key: key_hint::ctrl(KeyCode::Char('c')),
--            status_line_value: Some(Line::from("Status line content".to_string())),
-+            status_line_value: Some(vec![Line::from("Status line content".to_string())]),
-             status_line_enabled: true,
-             key_hints: FooterKeyHints::default_bindings(),
-             active_agent_label: None,
-@@ -1781,7 +1791,7 @@ mod tests {
-             collaboration_modes_enabled: false,
-             is_wsl: false,
-             quit_shortcut_key: key_hint::ctrl(KeyCode::Char('c')),
--            status_line_value: Some(Line::from("Status line content".to_string())),
-+            status_line_value: Some(vec![Line::from("Status line content".to_string())]),
-             status_line_enabled: true,
-             key_hints: FooterKeyHints::default_bindings(),
-             active_agent_label: None,
-@@ -1797,7 +1807,7 @@ mod tests {
-             collaboration_modes_enabled: false,
-             is_wsl: false,
-             quit_shortcut_key: key_hint::ctrl(KeyCode::Char('c')),
--            status_line_value: Some(Line::from("Status line content".to_string())),
-+            status_line_value: Some(vec![Line::from("Status line content".to_string())]),
-             status_line_enabled: true,
-             key_hints: FooterKeyHints::default_bindings(),
-             active_agent_label: None,
-@@ -1888,9 +1898,9 @@ mod tests {
-             collaboration_modes_enabled: true,
-             is_wsl: false,
-             quit_shortcut_key: key_hint::ctrl(KeyCode::Char('c')),
--            status_line_value: Some(Line::from(
-+            status_line_value: Some(vec![Line::from(
-                 "Status line content that should truncate before the mode indicator".to_string(),
--            )),
-+            )]),
-             status_line_enabled: true,
-             key_hints: FooterKeyHints::default_bindings(),
-             active_agent_label: None,
-@@ -1928,7 +1938,7 @@ mod tests {
-             collaboration_modes_enabled: false,
-             is_wsl: false,
-             quit_shortcut_key: key_hint::ctrl(KeyCode::Char('c')),
--            status_line_value: Some(Line::from("Status line content".to_string())),
-+            status_line_value: Some(vec![Line::from("Status line content".to_string())]),
-             status_line_enabled: true,
-             key_hints: FooterKeyHints::default_bindings(),
-             active_agent_label: Some("Robie [explorer]".to_string()),
-@@ -1947,10 +1957,10 @@ mod tests {
-             collaboration_modes_enabled: true,
-             is_wsl: false,
-             quit_shortcut_key: key_hint::ctrl(KeyCode::Char('c')),
--            status_line_value: Some(Line::from(
-+            status_line_value: Some(vec![Line::from(
-                 "Status line content that is definitely too long to fit alongside the mode label"
-                     .to_string(),
--            )),
-+            )]),
-             status_line_enabled: true,
-             key_hints: FooterKeyHints::default_bindings(),
-             active_agent_label: None,
++#[test]
++fn native_hud_clipping_keeps_input_and_bounds_rows() {
++    let mut composer = composer();
++    composer.set_native_hud_lines(vec![Line::from("HUD"); 20]);
++    assert_eq!(composer.footer.native_hud_lines.len(), 3);
++    for height in 0..=10 {
++        let (_, cursor) = render_with_height(&composer, 20, None, Some(height));
++        if let Some((x, y)) = cursor {
++            assert!(x < 20 && y >= 8 && y < 8 + height);
++        }
++    }
++}
 diff --git a/codex-rs/tui/src/bottom_pane/mod.rs b/codex-rs/tui/src/bottom_pane/mod.rs
-index 165169c..a45eb3c 100644
+index 75a7fee..0ccc278 100644
 --- a/codex-rs/tui/src/bottom_pane/mod.rs
 +++ b/codex-rs/tui/src/bottom_pane/mod.rs
-@@ -1656,6 +1656,12 @@ impl BottomPane {
+@@ -2340,6 +2340,12 @@ impl BottomPane {
          }
      }
  
-+    pub(crate) fn set_status_lines(&mut self, status_lines: Option<Vec<Line<'static>>>) {
-+        if self.composer.set_status_lines(status_lines) {
++    pub(crate) fn set_native_hud_lines(&mut self, lines: Vec<Line<'static>>) {
++        if self.composer.set_native_hud_lines(lines) {
 +            self.request_redraw();
 +        }
 +    }
@@ -293,124 +1562,253 @@ index 165169c..a45eb3c 100644
      pub(crate) fn set_status_line_hyperlink(&mut self, url: Option<String>) {
          if self.composer.set_status_line_hyperlink(url) {
              self.request_redraw();
-diff --git a/codex-rs/tui/src/chatwidget/status_controls.rs b/codex-rs/tui/src/chatwidget/status_controls.rs
-index 70f213b..2c92454 100644
---- a/codex-rs/tui/src/chatwidget/status_controls.rs
-+++ b/codex-rs/tui/src/chatwidget/status_controls.rs
-@@ -69,6 +69,11 @@ impl ChatWidget {
-         self.bottom_pane.set_status_line(status_line);
+diff --git a/codex-rs/tui/src/chatwidget.rs b/codex-rs/tui/src/chatwidget.rs
+index 15dac97..eed1c9e 100644
+--- a/codex-rs/tui/src/chatwidget.rs
++++ b/codex-rs/tui/src/chatwidget.rs
+@@ -379,6 +379,7 @@ mod settings_popups;
+ mod side;
+ use self::safety_buffering::SafetyBufferingState;
+ mod status_state;
++mod native_hud;
+ mod windows_sandbox_prompts;
+ use self::status_state::StatusIndicatorState;
+ use self::status_state::StatusState;
+@@ -739,6 +740,7 @@ pub(crate) struct ChatWidget {
+     // Cached project-root display name keyed by cwd for status/title rendering.
+     status_line_project_root_name_cache: Option<CachedProjectRootName>,
+     // Cached git branch name for the status line (None if unknown).
++    native_hud: Option<native_hud::NativeHud>,
+     status_line_branch: Option<String>,
+     // CWD used to resolve the cached branch; change resets branch state.
+     status_line_branch_cwd: Option<PathBuf>,
+@@ -1176,6 +1178,7 @@ impl ChatWidget {
+         {
+             self.refresh_terminal_title();
+         }
++        self.refresh_native_hud();
+         self.refresh_status_line_if_workspace_headline_due();
+         self.refresh_thread_usage_if_settlement_due();
      }
- 
-+    /// Sets the currently rendered footer status-line value as one or more lines.
-+    pub(crate) fn set_status_lines(&mut self, status_lines: Option<Vec<Line<'static>>>) {
-+        self.bottom_pane.set_status_lines(status_lines);
+diff --git a/codex-rs/tui/src/chatwidget/constructor.rs b/codex-rs/tui/src/chatwidget/constructor.rs
+index cf78ed0..3691be2 100644
+--- a/codex-rs/tui/src/chatwidget/constructor.rs
++++ b/codex-rs/tui/src/chatwidget/constructor.rs
+@@ -264,6 +264,7 @@ impl ChatWidget {
+             terminal_title_animation_origin: Instant::now(),
+             terminal_title_next_refresh: None,
+             status_line_project_root_name_cache: None,
++            native_hud: super::native_hud::NativeHud::from_env(),
+             status_line_branch: None,
+             status_line_branch_cwd: None,
+             status_line_branch_pending: false,
+diff --git a/codex-rs/tui/src/chatwidget/native_hud.rs b/codex-rs/tui/src/chatwidget/native_hud.rs
+new file mode 100644
+index 0000000..cdfe17b
+--- /dev/null
++++ b/codex-rs/tui/src/chatwidget/native_hud.rs
+@@ -0,0 +1,261 @@
++//! Opt-in local HUD bridge. No shell or project-config command execution.
++//! One bounded child runs at a time, outside the UI thread. Launcher-supplied
++//! absolute paths are captured once; only the active rollout is readable by Node.
++use std::path::PathBuf;
++use std::process::Stdio;
++use std::time::{Duration, Instant};
++
++use codex_ansi_escape::ansi_escape_line;
++use ratatui::text::Line;
++use serde_json::Value;
++use tokio::io::{AsyncReadExt, AsyncWriteExt};
++use tokio::process::Command;
++use tokio::sync::oneshot;
++use tokio::task::JoinHandle;
++
++use super::ChatWidget;
++use crate::tui::FrameRequester;
++
++const REFRESH: Duration = Duration::from_secs(2);
++const TIMEOUT: Duration = Duration::from_secs(2);
++const MAX_OUTPUT: u64 = 16 * 1024;
++
++pub(super) struct NativeHud {
++    node: PathBuf,
++    script: PathBuf,
++    last_started: Option<Instant>,
++    pending: Option<(String, oneshot::Receiver<Option<Vec<Line<'static>>>>)>,
++    task: Option<JoinHandle<()>>,
++    key: String,
++    lines: Vec<Line<'static>>,
++}
++
++impl Drop for NativeHud {
++    fn drop(&mut self) {
++        if let Some(task) = self.task.take() {
++            task.abort();
++        }
++    }
++}
++
++impl NativeHud {
++    pub(super) fn from_env() -> Option<Self> {
++        let node = PathBuf::from(std::env::var_os("CODEX_NATIVE_HUD_NODE")?);
++        let script = PathBuf::from(std::env::var_os("CODEX_NATIVE_HUD_SCRIPT")?);
++        if !node.is_absolute() || !script.is_absolute() || !node.is_file() || !script.is_file() {
++            return None;
++        }
++        Some(Self {
++            node: node.canonicalize().ok()?,
++            script: script.canonicalize().ok()?,
++            last_started: None,
++            pending: None,
++            task: None,
++            key: String::new(),
++            lines: vec![Line::from("HUD loading…")],
++        })
 +    }
 +
-     /// Sets the terminal hyperlink target for the currently rendered footer status line.
-     pub(crate) fn set_status_line_hyperlink(&mut self, url: Option<String>) {
-         self.bottom_pane.set_status_line_hyperlink(url);
-diff --git a/codex-rs/tui/src/chatwidget/status_surfaces.rs b/codex-rs/tui/src/chatwidget/status_surfaces.rs
-index e34fe46..a369367 100644
---- a/codex-rs/tui/src/chatwidget/status_surfaces.rs
-+++ b/codex-rs/tui/src/chatwidget/status_surfaces.rs
-@@ -12,7 +12,9 @@ use codex_app_server_protocol::AskForApproval;
- use codex_protocol::config_types::ApprovalsReviewer;
- use codex_protocol::config_types::ServiceTier;
- use codex_protocol::models::PermissionProfile;
-+use codex_ansi_escape::ansi_escape_line;
- use codex_utils_sandbox_summary::summarize_permission_profile;
-+use std::process::Command;
- 
- use super::status_state::TerminalTitleStatusKind;
- 
-@@ -43,6 +45,7 @@ const TERMINAL_TITLE_ACTION_REQUIRED_PREFIX_HIDDEN: &str = "[ . ] Action Require
- /// from the same selection set.
- struct StatusSurfaceSelections {
-     status_line_items: Vec<StatusLineItem>,
-+    status_line_command: Option<String>,
-     invalid_status_line_items: Vec<String>,
-     terminal_title_items: Vec<TerminalTitleItem>,
-     invalid_terminal_title_items: Vec<String>,
-@@ -81,8 +84,11 @@ impl ChatWidget {
-         let (status_line_items, invalid_status_line_items) = self.status_line_items_with_invalids();
-         let (terminal_title_items, invalid_terminal_title_items) =
-             self.terminal_title_items_with_invalids();
-+        let status_line_command =
-+            status_line_command_from_ids(self.configured_status_line_items());
-         StatusSurfaceSelections {
-             status_line_items,
-+            status_line_command,
-             invalid_status_line_items,
-             terminal_title_items,
-             invalid_terminal_title_items,
-@@ -158,6 +164,14 @@ impl ChatWidget {
-     }
- 
-     fn refresh_status_line_from_selections(&mut self, selections: &StatusSurfaceSelections) {
-+        if let Some(command) = selections.status_line_command.as_ref() {
-+            self.bottom_pane.set_status_line_enabled(true);
-+            let lines = status_line_command_output(command, self.status_line_cwd());
-+            self.set_status_lines(lines);
-+            self.set_status_line_hyperlink(/*url*/ None);
++    fn poll(&mut self, input: Value, frames: &FrameRequester) -> Vec<Line<'static>> {
++        let key = format!("{}:{}", input["threadId"], input["cwd"]);
++        if self.key != key {
++            if let Some(task) = self.task.take() {
++                task.abort();
++            }
++            self.pending = None;
++            self.last_started = None;
++            self.lines = vec![Line::from("HUD loading…")];
++            self.key = key.clone();
++        }
++        if let Some((pending_key, receiver)) = self.pending.as_mut() {
++            match receiver.try_recv() {
++                Ok(lines) => {
++                    if *pending_key == key {
++                        self.lines = lines.unwrap_or_else(|| {
++                            vec![Line::from("HUD unavailable (timeout or renderer error)")]
++                        });
++                    }
++                    self.pending = None;
++                    self.task = None;
++                }
++                Err(oneshot::error::TryRecvError::Closed) => {
++                    self.lines = vec![Line::from("HUD unavailable (renderer stopped)")];
++                    self.pending = None;
++                    self.task = None;
++                }
++                Err(oneshot::error::TryRecvError::Empty) => {}
++            }
++        }
++        if self.pending.is_none()
++            && self
++                .last_started
++                .is_none_or(|start| start.elapsed() >= REFRESH)
++        {
++            let node = self.node.clone();
++            let script = self.script.clone();
++            let frames = frames.clone();
++            let (sender, receiver) = oneshot::channel();
++            self.last_started = Some(Instant::now());
++            self.pending = Some((key, receiver));
++            self.task = Some(tokio::spawn(async move {
++                let lines = run_renderer(node, script, input).await;
++                let _ = sender.send(lines);
++                frames.schedule_frame();
++            }));
++        }
++        frames.schedule_frame_in(REFRESH);
++        self.lines.clone()
++    }
++}
++
++impl ChatWidget {
++    pub(super) fn refresh_native_hud(&mut self) {
++        if self.native_hud.is_none() {
 +            return;
 +        }
-+
-         let enabled = !selections.status_line_items.is_empty();
-         self.bottom_pane.set_status_line_enabled(enabled);
-         if !enabled {
-@@ -384,7 +398,11 @@ impl ChatWidget {
-     ///
-     /// Unknown ids are deduplicated in insertion order for warning messages.
-     fn status_line_items_with_invalids(&self) -> (Vec<StatusLineItem>, Vec<String>) {
--        parse_items_with_invalids(self.configured_status_line_items())
-+        parse_items_with_invalids(
-+            self.configured_status_line_items()
-+                .into_iter()
-+                .filter(|item| !is_status_line_command_item(item)),
-+        )
-     }
- 
-     pub(super) fn configured_status_line_items(&self) -> Vec<String> {
-@@ -952,3 +970,89 @@ where
-     }
-     (items, invalid)
- }
-+
-+const STATUS_LINE_COMMAND_PREFIX: &str = "command:";
-+
-+fn is_status_line_command_item(item: &str) -> bool {
-+    item.trim_start().starts_with(STATUS_LINE_COMMAND_PREFIX)
-+}
-+
-+fn status_line_command_from_ids(ids: impl IntoIterator<Item = String>) -> Option<String> {
-+    ids.into_iter().find_map(|item| {
-+        let command = item.trim_start().strip_prefix(STATUS_LINE_COMMAND_PREFIX)?;
-+        let command = command.trim();
-+        (!command.is_empty()).then(|| command.to_string())
-+    })
-+}
-+
-+fn status_line_command_output(command: &str, cwd: &Path) -> Option<Vec<Line<'static>>> {
-+    let mut process = if cfg!(windows) {
-+        let mut process = Command::new("cmd");
-+        process.arg("/C").arg(command);
-+        process
-+    } else {
-+        let mut process = Command::new("sh");
-+        process.arg("-lc").arg(command);
-+        process
-+    };
-+    let output = process.current_dir(cwd).output().ok()?;
-+
-+    if !output.status.success() {
-+        return None;
++        let input = serde_json::json!({
++            "model": self.current_model(),
++            "reasoningEffort": self.effective_reasoning_effort(),
++            "cwd": self.current_cwd.as_deref().unwrap_or(self.config.cwd.as_path()),
++            "threadId": self.thread_id.map(|id| id.to_string()),
++            "rolloutPath": self.current_rollout_path,
++            "branch": self.status_line_branch,
++        });
++        if let Some(hud) = self.native_hud.as_mut() {
++            let lines = hud.poll(input, &self.frame_requester);
++            self.bottom_pane.set_native_hud_lines(lines);
++        }
 +    }
++}
 +
-+    let text = String::from_utf8_lossy(&output.stdout);
++async fn run_renderer(node: PathBuf, script: PathBuf, input: Value) -> Option<Vec<Line<'static>>> {
++    let mut command;
++    // Defense in depth on the supported macOS release target: deny network and
++    // writes even if a future renderer change accidentally adds such operations.
++    #[cfg(target_os = "macos")]
++    {
++        command = Command::new("/usr/bin/sandbox-exec");
++        command.args([
++            "-p",
++            "(version 1)(allow default)(deny network*)(deny file-write*)",
++        ]);
++        command.arg(&node);
++    }
++    #[cfg(not(target_os = "macos"))]
++    {
++        command = Command::new(&node);
++    }
++    command
++        .env_clear()
++        .arg("--permission")
++        .arg(format!("--allow-fs-read={}", script.parent()?.display()));
++    if let Some(rollout) = input["rolloutPath"].as_str() {
++        command.arg(format!("--allow-fs-read={rollout}"));
++    }
++    command
++        .arg(&script)
++        .current_dir(script.parent()?)
++        .stdin(Stdio::piped())
++        .stdout(Stdio::piped())
++        .stderr(Stdio::null())
++        .kill_on_drop(true);
++    run_command(command, serde_json::to_vec(&input).ok()?).await
++}
++
++async fn run_command(mut command: Command, bytes: Vec<u8>) -> Option<Vec<Line<'static>>> {
++    let mut child = command.spawn().ok()?;
++    let mut stdin = child.stdin.take()?;
++    let stdout = child.stdout.take()?;
++    let result = tokio::time::timeout(TIMEOUT, async {
++        stdin.write_all(&bytes).await.ok()?;
++        stdin.shutdown().await.ok()?;
++        drop(stdin);
++        let mut output = Vec::new();
++        stdout
++            .take(MAX_OUTPUT + 1)
++            .read_to_end(&mut output)
++            .await
++            .ok()?;
++        if output.len() as u64 > MAX_OUTPUT {
++            return None;
++        }
++        if !child.wait().await.ok()?.success() {
++            return None;
++        }
++        parse_output(&output)
++    })
++    .await
++    .ok()
++    .flatten();
++    // Kill and reap on timeout/oversized output, as well as on renderer failure.
++    if child.id().is_some() {
++        let _ = child.kill().await;
++    }
++    result
++}
++
++fn parse_output(bytes: &[u8]) -> Option<Vec<Line<'static>>> {
++    let text = std::str::from_utf8(bytes).ok()?;
 +    let lines = text
 +        .lines()
-+        .map(str::trim_end)
-+        .filter(|line| !line.is_empty())
++        .filter(|line| !line.trim().is_empty())
 +        .take(3)
 +        .map(ansi_escape_line)
 +        .collect::<Vec<_>>();
@@ -418,46 +1816,69 @@ index e34fe46..a369367 100644
 +}
 +
 +#[cfg(test)]
-+mod command_status_line_tests {
++mod tests {
 +    use super::*;
-+    use ratatui::style::Color;
-+    use std::path::Path;
-+
++    use pretty_assertions::assert_eq;
 +    #[test]
-+    fn status_line_command_from_ids_extracts_command_item() {
-+        let command = status_line_command_from_ids([
-+            "model-with-reasoning".to_string(),
-+            "command: codex-hud status".to_string(),
-+        ]);
-+
-+        assert_eq!(command, Some("codex-hud status".to_string()));
-+    }
-+
-+    #[test]
-+    fn parse_items_with_invalids_ignores_command_items() {
-+        let (items, invalid) = parse_items_with_invalids::<StatusLineItem>(
-+            ["command: codex-hud status".to_string()]
-+                .into_iter()
-+                .filter(|item| !is_status_line_command_item(item)),
++    fn bounds_rows_and_preserves_ansi_colors() {
++        let lines = parse_output(b"\x1b[35mHUD\x1b[0m\none\ntwo\nignored").unwrap();
++        assert_eq!(lines.len(), 3);
++        assert_eq!(
++            lines[0],
++            Line::from(ratatui::text::Span::styled(
++                "HUD",
++                ratatui::style::Style::default().fg(ratatui::style::Color::Magenta)
++            ))
 +        );
-+
-+        assert!(items.is_empty());
-+        assert!(invalid.is_empty());
++    }
++    #[test]
++    fn rejects_empty_and_invalid_utf8() {
++        assert_eq!(parse_output(b"\n  \n"), None);
++        assert_eq!(parse_output(&[0xff]), None);
++    }
++    #[cfg(unix)]
++    #[tokio::test]
++    async fn timeout_and_output_limit_do_not_block_ui() {
++        for (program, args) in [("/bin/sleep", vec!["10"]), ("/usr/bin/yes", vec![])] {
++            let mut command = Command::new(program);
++            command
++                .args(args)
++                .stdin(Stdio::piped())
++                .stdout(Stdio::piped())
++                .stderr(Stdio::null())
++                .kill_on_drop(true);
++            let started = Instant::now();
++            assert_eq!(run_command(command, Vec::new()).await, None);
++            assert!(started.elapsed() < Duration::from_secs(5));
++        }
 +    }
 +
-+    #[test]
-+    fn status_line_command_output_preserves_multiline_stdout_for_footer() {
-+        let output = status_line_command_output("printf 'one\\ntwo\\n'", Path::new("."));
-+
-+        assert_eq!(output, Some(vec![Line::from("one"), Line::from("two")]));
-+    }
-+
-+    #[test]
-+    fn status_line_command_output_parses_ansi_styles() {
-+        let output = status_line_command_output("printf '\\033[35mHUD\\033[0m\\n'", Path::new("."))
-+            .expect("status line output");
-+
-+        assert_eq!(output[0].spans[0].content.as_ref(), "HUD");
-+        assert_eq!(output[0].spans[0].style.fg, Some(Color::Magenta));
++    #[cfg(unix)]
++    #[tokio::test]
++    async fn json_like_input_is_data_not_shell_syntax() {
++        let mut command = Command::new("/bin/cat");
++        command
++            .stdin(Stdio::piped())
++            .stdout(Stdio::piped())
++            .stderr(Stdio::null())
++            .kill_on_drop(true);
++        let input = b"$(touch /tmp/HUD-INJECTION)".to_vec();
++        assert_eq!(
++            run_command(command, input).await,
++            Some(vec![Line::from("$(touch /tmp/HUD-INJECTION)")])
++        );
 +    }
 +}
+diff --git a/codex-rs/tui/src/chatwidget/status_surfaces.rs b/codex-rs/tui/src/chatwidget/status_surfaces.rs
+index 46727cf..59d115c 100644
+--- a/codex-rs/tui/src/chatwidget/status_surfaces.rs
++++ b/codex-rs/tui/src/chatwidget/status_surfaces.rs
+@@ -159,7 +159,7 @@ impl ChatWidget {
+     }
+ 
+     fn sync_status_surface_shared_state(&mut self, selections: &StatusSurfaceSelections) {
+-        if !selections.uses_git_branch() {
++        if !selections.uses_git_branch() && self.native_hud.is_none() {
+             self.status_line_branch = None;
+             self.status_line_branch_pending = false;
+             self.status_line_branch_lookup_complete = false;

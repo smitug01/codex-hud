@@ -29,19 +29,15 @@ test("parseNativeArgs forwards Codex args after --", () => {
   assert.deepEqual(parsed.codexArgs, ["--model", "gpt-5.5"]);
 });
 
-test("buildNativeCodexArgs injects command-backed HUD status line", () => {
+test("buildNativeCodexArgs forwards arguments without introducing shell execution", () => {
   assert.deepEqual(buildNativeCodexArgs(["--model", "gpt-5.5"]), [
-    "-c",
-    'tui.status_line=["command: codex-hud status"]',
     "--model",
     "gpt-5.5",
   ]);
 });
 
-test("buildNativeCodexArgs uses the cmd shim for command-backed HUD on Windows", () => {
+test("buildNativeCodexArgs also leaves Windows arguments unchanged", () => {
   assert.deepEqual(buildNativeCodexArgs(["--model", "gpt-5.5"], { platform: "win32" }), [
-    "-c",
-    'tui.status_line=["command: codex-hud.cmd status"]',
     "--model",
     "gpt-5.5",
   ]);
@@ -68,7 +64,7 @@ test("runNativeCodex dry-run uses the Windows footer command on Windows", async 
     process.stdout.write = originalWrite;
   }
 
-  assert.match(output, /codex-hud\.cmd status/);
+  assert.doesNotMatch(output, /command:/);
   assert.doesNotMatch(output, /command: codex-hud status/);
 });
 
@@ -103,7 +99,7 @@ test("resolveNativeCodexPath uses codex.exe on Windows by default", () => {
       homeDir: "C:\\Users\\me",
       platform: "win32",
     }),
-    "C:\\Users\\me\\Desktop\\Github_repos\\openai-codex\\codex-rs\\target\\release\\codex.exe",
+    "C:\\Users\\me\\\.codex-hud\\native\\openai-codex-0.161.0\\codex-rs\\target\\release\\codex.exe",
   );
 });
 

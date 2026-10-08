@@ -1,0 +1,83 @@
+name: Test and release hardened Codex HUD
+on:
+  push:
+    branches: [main]
+    tags: ['v*-hud.*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: native-hud-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24.15.0'
+      - name: Verify host and test HUD including security probes
+        run: |
+          test "$(uname -m)" = arm64
+          npm ci --ignore-scripts
+          npm test
+      - name: Fetch pinned Codex and apply reviewed patch
+        run: |
+          git init codex
+          git -C codex remote add origin https://github.com/openai/codex.git
+          git -C codex fetch --depth 1 origin 979011409de0a60b52f179721948e65531d26144
+          git -C codex checkout --detach FETCH_HEAD
+          test "$(git -C codex rev-parse HEAD)" = 979011409de0a60b52f179721948e65531d26144
+          git -C codex apply --check "$GITHUB_WORKSPACE/patches/codex-cli-command-statusline.patch"
+          git -C codex apply "$GITHUB_WORKSPACE/patches/codex-cli-command-statusline.patch"
+          rustup toolchain install 1.95.0 --profile minimal --component rustfmt
+      - name: Build patched CLI
+        working-directory: codex/codex-rs
+        run: cargo build --locked --release -p codex-cli
+      - name: Rust native HUD and existing status-surface regression tests
+        working-directory: codex/codex-rs
+        run: |
+          cargo test --locked --release -p codex-tui --lib native_hud
+          cargo test --locked --release -p codex-tui --lib status_surface
+      - name: Package release with checksums and build provenance
+        run: |
+          codex/codex-rs/target/release/codex --version | grep -Fx 'codex-cli 0.161.0'
+          mkdir -p bundle/bin bundle/scripts out
+          cp codex/codex-rs/target/release/codex bundle/bin/codex
+          cp scripts/codex-hud-native bundle/scripts/
+          cp -R dist bundle/dist
+          cp native-renderer.mjs package.json LICENSE SECURITY_REVIEW.md README.md bundle/
+          cp codex/LICENSE bundle/CODEX-LICENSE
+          cp patches/codex-cli-command-statusline.patch bundle/
+          printf 'HUD source: %s\nCodex source: 979011409de0a60b52f179721948e65531d26144\nRust: 1.95.0\n' "$GITHUB_SHA" > bundle/BUILD-INFO.txt
+          tar -czf out/codex-hud-0.161.0-macos-arm64.tar.gz -C bundle .
+          cd out
+          shasum -a 256 codex-hud-0.161.0-macos-arm64.tar.gz > SHA256SUMS
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: native-release
+          path: out/*
+          if-no-files-found: error
+  release:
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: native-release
+          path: out
+      - name: Publish only the tested tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" out/* --verify-tag --title "Codex 0.161.0 + hardened native HUD" --notes 'macOS Apple Silicon. Requires Node.js 24+. Extract and run scripts/codex-hud-native from your project directory. Includes source patch, security review, build metadata, and SHA-256 checksums. Unofficial unsigned build; official Codex installation is unchanged.'

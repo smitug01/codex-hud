@@ -107,7 +107,7 @@ test("codex-hud native dry-run prints patched Codex launch command", () => {
 
   assert.equal(result.status, 0);
   assert.match(result.stdout, /'\/tmp\/patched codex'/);
-  assert.match(result.stdout, /tui.status_line=/);
+  assert.doesNotMatch(result.stdout, /tui.status_line=/);
   assert.match(result.stdout, /--model gpt-5.5/);
 });
 

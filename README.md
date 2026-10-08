@@ -1,323 +1,59 @@
-# Codex HUD
+# Codex HUD for Codex 0.161.0 — hardened macOS fork
 
-Codex HUD is a terminal heads-up display for Codex CLI sessions. It surfaces the signals you usually need while working with an agent: model, reasoning effort, project, git branch, context usage, five-hour usage, weekly usage, active tools, and task progress.
+A native, live, three-row HUD below the Codex composer, using Codex **0.161.0**. This fork ports the display from [Jiawang1209/codex-hud](https://github.com/Jiawang1209/codex-hud) and replaces its shell-based renderer bridge with a bounded, asynchronous, restricted subprocess.
 
-```text
-[gpt-5.5 medium] │ codex-hud git:(main*)
-Context ████░░░░░░ 42% │ Usage ███████░░░ 68% (resets in 3h 17m) │ Weekly █████████░ 86% (resets in 6d 10h)
-Todos 2/5 │ Exec active, Plan x2
+## Use a release
+
+Download the macOS Apple Silicon bundle and `SHA256SUMS` from [Releases](https://github.com/smitug01/codex-hud/releases). Node.js **24+** is required. In the download directory:
+
+```sh
+shasum -a 256 -c SHA256SUMS
+mkdir codex-hud-native
+tar -xzf codex-hud-0.161.0-macos-arm64.tar.gz -C codex-hud-native
 ```
 
-Codex HUD is intentionally local-first. It reads Codex config, Codex session metadata, and git metadata from your machine. It does not upload data or need to display private message bodies.
+From your project directory, run the extracted launcher by its absolute path:
 
-## Install
-
-Follow the steps in order. If Node.js/npm or Codex CLI is already installed, skip that step.
-
-### 1. Set Up npm
-
-Codex HUD is distributed through npm and requires Node.js 18 or newer.
-
-macOS:
-
-```bash
-brew install node
+```sh
+/path/to/codex-hud-native/scripts/codex-hud-native
+/path/to/codex-hud-native/scripts/codex-hud-native resume --last
 ```
 
-Linux, Debian/Ubuntu:
+Your official `codex`, shell profile and global Codex configuration are not replaced. The launcher uses your existing Codex login/config/session home. To return to the official build, run `codex` normally. The binary is an unofficial, unsigned build.
 
-```bash
-sudo apt update
-sudo apt install -y nodejs npm
+The HUD reads only the current conversation rollout and receives the current model/effort/branch from Codex. It refreshes every two seconds. It stays below the input while ordinary shortcut/queue hints remain available. Slow or failed rendering reports `HUD unavailable` instead of blocking typing.
+
+## Security
+
+See [SECURITY_REVIEW.md](SECURITY_REVIEW.md) for findings, mitigations and limits. No intentional data-upload code was found in the inspected upstream HUD, but its original arbitrary `command:` shell bridge was risky and is removed here.
+
+The macOS native HUD subprocess has a cleared environment, bounded input/output, no shell execution, restricted file access, no child processes, no network access, and no filesystem writes. These restrictions apply to HUD; Codex itself continues its normal network and tool operations. Source/build dependencies are not comprehensively audited.
+
+The bundled renderer uses default styling. Custom `~/.codex-hud/config.json` is not loaded in native mode. It omits Git dirty/ahead/behind information and may omit historical activity outside the most recent 4 MiB of the active rollout. Upstream `status`/`run` pane commands remain available but do not share this native security boundary.
+
+## Build and release
+
+```sh
+npm ci --ignore-scripts
+npm test
 ```
 
-Windows, PowerShell:
+The committed patch applies to official Codex commit `979011409de0a60b52f179721948e65531d26144` (`rust-v0.161.0`). Build it with Rust 1.95.0:
 
-```powershell
-winget install OpenJS.NodeJS.LTS
+```sh
+git clone --depth 1 --branch rust-v0.161.0 https://github.com/openai/codex.git codex
+test "$(git -C codex rev-parse HEAD)" = 979011409de0a60b52f179721948e65531d26144
+git -C codex apply ../patches/codex-cli-command-statusline.patch
+cd codex/codex-rs
+cargo build --locked --release -p codex-cli
+cargo test --locked --release -p codex-tui --lib native_hud
+cargo test --locked --release -p codex-tui --lib status_surface
 ```
 
-Verify:
+Use `node dist/index.js native --codex /absolute/path/to/patched/codex --` to launch from a source checkout. Native mode requires macOS and Node.js 24+.
 
-```bash
-npm --version
-```
-
-### 2. Install Codex CLI
-
-Codex HUD is built for Codex CLI. If this works, skip this step:
-
-```bash
-codex --version
-```
-
-Install Codex CLI with one of the official options:
-
-```bash
-npm install -g @openai/codex
-```
-
-macOS users can also use Homebrew:
-
-```bash
-brew install --cask codex
-```
-
-See the official OpenAI Codex README for current Codex CLI install options and release binaries:
-
-```text
-https://github.com/openai/codex#installing-and-running-codex-cli
-```
-
-### 3. Install Codex HUD
-
-Install the package:
-
-```bash
-npm install -g @jiawang1209/codex-hud
-```
-
-Then install the native HUD adapter. This is the important step that makes the normal `codex` command use the full Codex HUD footer. `codex-hud setup` is only a fallback and does not install this adapter.
-
-Codex HUD is designed to provide the same native footer workflow on macOS, Linux, WSL, and Windows PowerShell/CMD without Docker. Each environment gets its own local install, shim, patched Codex binary, and `doctor` check. Keep WSL and native Windows installs separate; do not share `codex`, `codex-hud`, or npm paths across that boundary.
-
-| Environment | Support level | Shim | Footer command |
-| --- | --- | --- | --- |
-| macOS Terminal/iTerm2 | Reference native CLI path | `codex` | `codex-hud status` |
-| Linux | Native Unix CLI path | `codex` | `codex-hud status` |
-| WSL | Native Linux-style path inside WSL | `codex` | `codex-hud status` |
-| Windows PowerShell/CMD | Native Windows path using npm `.cmd` shims | `codex.cmd` | `codex-hud.cmd status` |
-
-After `codex-hud install`, the bottom footer uses the same renderer as `codex-hud status`. `codex-hud doctor` verifies the whole native footer chain: Codex CLI, Codex HUD, shim, patched Codex binary, and the platform-correct footer command.
-
-### macOS or Linux
-
-Install prerequisites:
-
-macOS:
-
-```bash
-brew install git rust tmux
-```
-
-Linux, Debian/Ubuntu:
-
-```bash
-sudo apt install -y git cargo tmux
-```
-
-Install the native adapter and launch Codex:
-
-```bash
-codex-hud install
-codex-hud doctor
-codex
-```
-
-If `codex` still resolves to the official binary after install, put `~/.local/bin` before the existing Codex binary in `PATH`.
-
-### Windows PowerShell or CMD
-
-Use this path when your prompt shows Windows paths such as `C:\Users\<you>\...`.
-
-This path is native Windows, not WSL. It uses npm `.cmd` shims so PowerShell execution policy does not block the footer command.
-
-Install prerequisites:
-
-```powershell
-winget install Git.Git Rustlang.Rustup
-```
-
-Install the native adapter and launch Codex:
-
-```powershell
-npm install -g @jiawang1209/codex-hud
-codex-hud.cmd install
-codex-hud.cmd doctor
-where.exe codex
-codex.cmd
-```
-
-`where.exe codex` should list the Codex HUD shim first, usually under `C:\Users\<you>\AppData\Roaming\npm\codex.cmd`. `codex-hud install` backs up an existing official `codex.cmd`, installs its own shim, and restores the backup during `codex-hud uninstall-shim`.
-
-Do not use `codex-hud setup` for this goal. `setup` only configures Codex CLI's built-in status line and will not make `codex.cmd` use the full Codex HUD footer.
-
-### WSL
-
-Use this path when you are inside WSL Ubuntu/Debian and paths look like `/home/<you>/...`. Treat WSL as Linux, not as native Windows.
-
-WSL uses the Linux-style path from inside WSL. Keep the WSL Codex install, WSL npm install, and WSL shim separate from any native Windows Codex or npm install.
-
-Install prerequisites:
-
-```bash
-sudo apt update
-sudo apt install -y git cargo tmux
-```
-
-Install the native adapter and launch Codex:
-
-```bash
-npm install -g @jiawang1209/codex-hud
-codex-hud install
-which codex
-codex-hud doctor
-codex
-```
-
-`which codex` should point to the WSL/Linux shim, usually under `~/.local/bin/codex`. Do not put the Windows `codex.cmd` path into WSL, and do not use the WSL shim from PowerShell.
-
-## Built-In Status Line Fallback
-
-Use this only if you cannot build the native adapter. It does not make `codex` use the full Codex HUD renderer.
-
-```bash
-codex-hud setup
-codex
-```
-
-This fallback configures Codex CLI's supported native status-line items. It is useful, but the style and rate-limit percentages can differ from `codex-hud status`.
-
-If your terminal font cannot render block progress bars cleanly, use ASCII bars:
-
-```bash
-CODEX_HUD_ASCII=1 codex-hud status
-```
-
-On Windows PowerShell:
-
-```powershell
-$env:CODEX_HUD_ASCII = "1"
-codex-hud.cmd status
-```
-
-## HUD Pane Mode
-
-Use a live HUD pane alongside Codex:
-
-```bash
-codex-hud run
-```
-
-Pass Codex arguments after `--`:
-
-```bash
-codex-hud run -- --model gpt-5.5 --sandbox danger-full-access
-```
-
-Terminal launchers:
-
-```bash
-codex-hud run --terminal tmux
-codex-hud run --terminal iterm
-codex-hud run --terminal terminal
-```
-
-`tmux` is the portable default. `iterm` and `terminal` are macOS launchers.
-
-## Commands
-
-| Command | Purpose |
-| --- | --- |
-| `codex-hud status` | Print one HUD snapshot. |
-| `codex-hud watch` | Refresh the HUD until interrupted. |
-| `codex-hud run` | Launch Codex with a persistent HUD pane. |
-| `codex-hud install` | Recommended: build the native adapter and make `codex` use the full Codex HUD footer. |
-| `codex-hud setup` | Fallback only: configure Codex CLI's built-in status line without installing the full HUD adapter. |
-| `codex-hud native` | Launch a patched Codex binary with command-backed HUD output. |
-| `codex-hud doctor` | Check Codex, Node.js, shim, native adapter, and config readiness. |
-| `codex-hud config` | Print the effective Codex HUD config. |
-| `codex-hud config init` | Create `~/.codex-hud/config.json`. |
-
-Remove the auto-launch shim:
-
-```bash
-codex-hud uninstall-shim
-```
-
-## Configuration
-
-Create a config file:
-
-```bash
-codex-hud config init
-```
-
-Default path:
-
-```text
-~/.codex-hud/config.json
-```
-
-Minimal example:
-
-```json
-{
-  "layout": "expanded",
-  "pathLevels": 2,
-  "elementOrder": ["model", "project", "context", "usage", "weekly", "todos", "tools"],
-  "display": {
-    "showContext": true,
-    "showUsage": true,
-    "showWeekly": true
-  },
-  "colors": {
-    "context": "yellow",
-    "usage": "magenta",
-    "weekly": "magenta"
-  }
-}
-```
-
-`layout` can be `expanded` or `compact`. `elementOrder` controls HUD section order. Colors support common ANSI names such as `cyan`, `magenta`, `yellow`, `red`, `green`, `gray`, `dim`, and truecolor hex values such as `#FF6600`.
-
-## Install From Source
-
-Use this when testing the latest GitHub version:
-
-```bash
-git clone https://github.com/Jiawang1209/codex-hud.git
-cd codex-hud
-npm install
-npm run build
-npm link
-```
-
-Then follow the same environment-specific native install step as above:
-
-```bash
-codex-hud install
-codex-hud doctor
-codex
-```
-
-## Data Sources
-
-Codex HUD reads:
-
-- `~/.codex/config.toml` for model and reasoning effort.
-- `~/.codex/sessions/**/*.jsonl` for token counters, rate limits, tool activity, and plan progress.
-- `git` for branch and dirty state.
-- `codex --version` for diagnostics.
-
-Session parsing uses structured metadata such as event types, tool names, token counters, rate-limit counters, and plan status. It avoids displaying private transcript message bodies.
-
-## Docs
-
-- [Installation details](docs/installation.md)
-- [Native Codex CLI patch](docs/native-codex-cli-patch.md)
-- [Plugin marketplace wrapper](docs/plugin-marketplace.md)
-- [Release checklist](docs/release.md)
-- [Upstream command-backed status-line proposal](docs/upstream/codex-command-backed-statusline.md)
-
-## Plugin Wrapper
-
-This repository includes a Codex plugin wrapper in `.codex-plugin/` and `plugins/codex-hud/`. The plugin gives Codex-side guidance and marketplace metadata; the terminal HUD runtime still comes from the `codex-hud` CLI installed through npm or from source.
-
-## Privacy
-
-Codex HUD reads local Codex configuration, local Codex session metadata, and local git metadata. It does not upload data.
+GitHub Actions builds/tests on pushes to `main`, PRs and manual dispatch. A version tag matching `v*-hud.*` additionally publishes a release after the build and tests pass, including SHA-256 checksums and source/build metadata. Publishing to npm is disabled for this fork.
 
 ## License
 
-MIT
+HUD retains its upstream MIT license. Codex source and binary retain their upstream Apache-2.0 license; release bundles include both license files.

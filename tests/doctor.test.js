@@ -235,5 +235,5 @@ test("createDoctorReport uses Windows defaults for shim and patched Codex paths"
   });
 
   assert.equal(report.codexShim.path, "C:\\Users\\me\\AppData\\Roaming\\npm\\codex.cmd");
-  assert.equal(report.patchedCodex.path, "C:\\Users\\me\\Desktop\\Github_repos\\openai-codex\\codex-rs\\target\\release\\codex.exe");
+  assert.equal(report.patchedCodex.path, "C:\\Users\\me\\.codex-hud\\native\\openai-codex-0.161.0\\codex-rs\\target\\release\\codex.exe");
 });

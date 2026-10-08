@@ -13,6 +13,10 @@ Scope: the installed upstream npm package `@jiawang1209/codex-hud@0.1.11`, the f
 | Low | Terminal-control injection / misleading identity | Untrusted tool names, directory names and branch text are rendered without removing control characters; model identity is read from global config rather than active runtime state. | Strip controls and bidi overrides from dynamic strings before adding trusted ANSI styles; use current model/effort/branch from Codex. |
 | Low | Installing an older Codex without clear version parity | Original installer pins `rust-v0.131.0`, despite a newer official CLI being installed. | Pin 0.161.0 commit `979011409de0a60b52f179721948e65531d26144`; verify before patching; leave official CLI untouched in the release-bundle path. |
 
+## Package provenance
+
+The installed npm package was compared byte-for-byte with the registry tarball: all 41 runtime, source-map, package manifest, and patch files matched. The tarball integrity was verified as `sha512-lC3H3p617Mxh7luBZsD5DVikafembtGj/3bUbuQKrFRrNxJ+N7196ocEfhJ/nLp+kyzGgFJy5iEb1KOuNN4pQw==`. This detects local divergence from the published package, not malicious code already present in the publisher's package. The fork base is upstream commit `53e120d`; source changes after npm 0.1.11 include upstream shim handling fixes.
+
 ## Exfiltration / backdoor assessment
 
 No explicit upload, telemetry endpoint, HTTP client, WebSocket client, obfuscated payload loader, `eval`, or npm install lifecycle hook was found in the reviewed HUD runtime. The package has no runtime npm dependencies. The original installer contacts GitHub to clone Codex; Cargo contacts source/package registries while building. Normal Codex itself still communicates with its configured model/services.

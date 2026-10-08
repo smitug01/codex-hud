@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { tmpdir } from "node:os";
 
@@ -125,18 +125,23 @@ test("codex-hud status honors CODEX_HUD_FORCE_COLOR", () => {
   assert.match(result.stdout, /\x1b\[/);
 });
 
-test("codex-hud status honors CODEX_HUD_ASCII", () => {
-  const result = spawnSync(process.execPath, ["dist/index.js", "status"], {
-    encoding: "utf8",
-    env: {
-      ...process.env,
-      CODEX_HUD_ASCII: "1",
-    },
-  });
-
-  assert.equal(result.status, 0);
-  assert.match(result.stdout, /[#-]{10}/);
-  assert.doesNotMatch(result.stdout, /█|░/);
+test("codex-hud status honors CODEX_HUD_ASCII", async () => {
+  const fixtureCodexHome = await mkdtemp(path.join(tmpdir(), "codex-hud-ascii-"));
+  try {
+    await mkdir(path.join(fixtureCodexHome, "sessions"));
+    await writeFile(path.join(fixtureCodexHome, "sessions", "fixture.jsonl"), JSON.stringify({
+      payload: { type: "token_count", info: { last_token_usage: { total_tokens: 25 }, model_context_window: 100 } },
+    }) + "\n");
+    const result = spawnSync(process.execPath, ["dist/index.js", "status"], {
+      encoding: "utf8",
+      env: { ...process.env, CODEX_HOME: fixtureCodexHome, CODEX_HUD_ASCII: "1" },
+    });
+    assert.equal(result.status, 0);
+    assert.match(result.stdout, /[#-]{10}/);
+    assert.doesNotMatch(result.stdout, /█|░/);
+  } finally {
+    await rm(fixtureCodexHome, { recursive: true, force: true });
+  }
 });
 
 test("codex-hud install-shim installs codex wrapper into explicit bin dir", async () => {

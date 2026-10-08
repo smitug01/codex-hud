@@ -53,6 +53,7 @@ jobs:
           cp -R dist bundle/dist
           cp native-renderer.mjs package.json LICENSE SECURITY_REVIEW.md README.md bundle/
           cp codex/LICENSE bundle/CODEX-LICENSE
+          cp codex/NOTICE bundle/CODEX-NOTICE
           cp patches/codex-cli-command-statusline.patch bundle/
           printf 'HUD source: %s\nCodex source: 979011409de0a60b52f179721948e65531d26144\nRust: 1.95.0\n' "$GITHUB_SHA" > bundle/BUILD-INFO.txt
           tar -czf out/codex-hud-0.161.0-macos-arm64.tar.gz -C bundle .
